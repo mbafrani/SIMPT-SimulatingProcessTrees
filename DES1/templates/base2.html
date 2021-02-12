@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="if/else">
+ {% if window == 1 %}
+     <script>alert('Submit successfully!');</script>
+ {% endif %}
+ </div>
+ <div class="row">
+     <div class=" col-sm-6 col-md-7 col-lg-8">
+      <form style="margin-left:30px" class="input-group mb-3" method="POST" action="{% url 'submit2' %}">
+      {% csrf_token %}
+
+      <h4 style=" margin-top:30px;margin-left:0px" >Setting of Trace:</h4>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Capacity</a></span>
+        </div>
+        <input type="text" style="background-color:transparent;  " size="130" name="trca1" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+      </div>
+
+
+
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit</a></span>
+        </div>
+        <input type="text" style="background-color:transparent;  " size="130" name="trli1" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Waiting Time</a></span>
+        </div>
+
+        <input type="text" style="background-color:transparent;"  name="trdu1" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+        <div class="input-group-append">
+        <span class="input-group-text" style="background-color:transparent"><a style=" ">{{waitingtime}}</a></span>
+
+      </div>
+      </div>
+
+
+
+      <div>
+       <h4 style=" margin-top:30px;margin-bottom:13px;margin-left:0px" >Setting of Activity:</h4>
+       <h5 style=" margin-left:0px" >Capacity:</h5>
+     </div>
+
+       {% csrf_token %}
+
+        {% for x in activitylist %}
+        <div class="input-group mb-3">
+
+          <div class="input-group-prepend">
+
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Capacity of {{x}}</a></span>
+          </div>
+
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x}}c" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+
+        </div>
+        {% endfor %}
+
+        <h5 style=" margin-left:0px" >Limit:</h5>
+
+        {% for x in actresource %}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit of {{x.0}}</a></span>
+          </div>
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x.0}}l" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+          <div class="input-group-append">
+          <span class="input-group-text" style="background-color:transparent"><a style=" ">{{x.1}}</a></span>
+        </div>
+        </div>
+        {% endfor %}
+
+        <h5 style=" margin-left:0px" >Duration:</h5>
+
+        {% for x in duration %}
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Duration of {{x.0}}</a></span>
+          </div>
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x.0}}d" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+          <div class="input-group-append">
+          <span class="input-group-text" style="background-color:transparent"><a style=" ">{{x.1}}</a></span>
+        </div>
+        </div>
+        {% endfor %}
+
+        <div class="input-group mb-3" style="margin-top:0px">
+
+          <form class="form-inline my-2 my-lg-0" action="{% url 'submit2' %}">
+            <button type="submit" class="btn btn-primary mb-2 mt-4" action="{% url 'submit2' %}">Submit</button>
+            </form>
+
+
+        &nbsp &nbsp
+
+
+
+      </div>
+
+      </form>
+
+
+
+
+
+
+
+      </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

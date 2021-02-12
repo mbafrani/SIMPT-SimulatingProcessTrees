@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="overviewsize">
+
+        <form style="margin-left:30px" class="input-group">
+            <div style="margin-top:30px">
+                <h4>Event Log:</h4>
+                <h5>The input log is: {{ settinglist.17 }}</h5>
+                <h5>Case ID: {{ settinglist.18.0 }}</h5>
+                <h5>Activity: {{ settinglist.18.1 }}</h5>
+                <h5>Resource: {{ settinglist.18.2 }}</h5>
+                <h5>Timestamp: {{ settinglist.18.3 }}</h5>
+                <h5>Start Timestamp: {{ settinglist.18.4 }}</h5>
+                <h5>Complete Timestamp: {{ settinglist.18.5 }}</h5>
+                <h5>Transition: {{ settinglist.18.6 }}</h5>
+
+                <h4 style="margin-top:30px">Configuration:</h4>
+                <h5>The capacity of trace is: {{ settinglist.0 }}</h5>
+                <h5>The limit of trace is: {{ settinglist.1 }}</h5>
+                <h5>The waiting time of trace is: {{ settinglist.2 }}</h5>
+                <h5>The capacity of each activity: {{ settinglist.3 }}</h5>
+                <h5>The limit of each activity: {{ settinglist.4 }}</h5>
+                <h5>The business hour is: {{ settinglist.5 }}</h5>
+                <h5>The business day is: {{ settinglist.6 }}</h5>
+                <h5>Will the process be interruptted? {{ settinglist.7 }}</h5>
+                <h5>Will the process be missed? {{ settinglist.8 }}</h5>
+                <h5>The cycle time is: {{ settinglist.9 }}</h5>
+                <h5>The start time is: {{ settinglist.10 }}</h5>
+                <h5>The number of trace is: {{ settinglist.11 }}</h5>
+                <h5>Will the time interval be extended? {{ settinglist.12 }}</h5>
+                <h5>The duration of each activity is: {{ settinglist.13 }}</h5>
+                <h5>The deviation of each activity is: {{ settinglist.15 }}</h5>
+
+
+
+            </div>
+
+
+        </form>
+    </div>
+
+    <div class="input-group mb-3">
+
+        
+    </div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+      {% block b1 %}
+
+          <h4 style="margin-top:30px;margin-left:30px">This is our simulation:</h4>
+
+          <ol>
+              {% for x in RESULT %}
+                  <li><h5>{{ x }}</h5></li>
+              {% endfor %}
+          </ol>
+          <br/><br/>
+      {% endblock %}
+
+
+
+{% endblock %}

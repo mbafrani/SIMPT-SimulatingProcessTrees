@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <form style="margin-left:30px" class="input-group mb-3">
+        <img style="background-color:transparent" src="./static/ptree.gv.png" width="560" height="505"/>
+
+        {{ ADRESS }}
+
+
+        <form class="input-group mb-3" method="POST" action="{% url 'changeptree' %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="background-color:transparent" id="basic-addon1"><a style=" ">Log address</a></span>
+                </div>
+                <input type="search" style="background-color:transparent;   opacity: 0.8" name="chpt"
+                       class="form-control" placeholder="Please enter the path of an event log" aria-label="Search"
+                       aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+                <form class="form-inline my-2 my-lg-0" action="{% url 'changeptree' %}">
+                    <button type="submit" method="RESULT" class="btn btn-primary mb-2 mt-4" action="{% url 'changeptree' %}">
+                        Change Ptree
+                    </button>
+                </form>
+            </div>
+
+
+        </form>
+
+    </form>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+        <form class="input-group mb-3">
+            <div style="margin-top:30px;margin-left:30px" class="headfontsize">
+                <div>
+                    <h4>Here is the step of simulation:</h4>
+                      <ol>
+                          <li><h5>Upload an event log and click "Submit".</h5></li>
+                          <li><h5>Map all the attributes of the event log and click "Submit".</h5></li>
+                          <li><h5>Click "Statistics", you will see the process statistics of the input log.</h5></li>
+
+                          <li><h5>Click "Process Tree", you will see the image of the generated process tree
+                              of
+                              the given log.</h5></li>
+                          <li><h5>If you want to change the process tree, you can upload a new event log and click "Submit".</h5></li>
+
+                          <li><h5>Click "Configuration" to configure the setting of our simulation.</h5></li>
+
+                          <li><h5>Click "Submit" once you finished your setting.</h5></li>
+                          <li><h5>If you want to change duration, capacity, or limit, click "Further Configuration".</h5></li>
+
+                          <li><h5>Click "Setting", you can check your currently used setting.</h5></li>
+                          <li><h5>Click "Record" to record our upcoming simulation.</h5></li>
+                          <li><h5>Click "Start" to start our simulation.</h5></li>
+
+                          <li><h5>Click "Result", you will see the result of our simulation.</h5></li>
+                          <li><h5>Click "Overview", you will see the overview of our simulation.</h5></li>
+                          <li><h5>To change your setting, you can modify them by entering new entries and
+                              clicking
+                              "Submit" once again.</h5></li>
+                          <li><h5>If you want to continue simulating based on the last simulation, click
+                              "Continue".</h5></li>
+                          <li><h5>If you want to start a new simulation, click "Start" once again.</h5></li>
+                          <li><h5>Click "Save" to save our simulation into simulationresult.csv and download it once the simualtion is finished.</h5></li>
+
+                      </ol>
+          </div>
+          <br/>
+          <div>
+          <h4>Process Tree:
+            <ul>
+                <li><h5>The syntax of process tree we defined is based on PM4Py, so, please check the definition on PM4Py.</h5></li>
+                <li><h5>To change the process tree, you can copy the original process tree, paste it to the text box, and modify based on it.</h5></li>
+                <li><h5>Please be careful that there should be no space at the beginning and the end of your entry.</h5></li>
+                <li><h5>Please make sure that the number of left and right parentheses are consistent.</h5></li>
+                <li><h5>You should seperate each operator, label, and closing parenthesis by space.</h5></li>
+                <li><h5>Please make sure that the number of left and right parentheses are equal.</h5></li>
+                <li><h5>For a more intuitive explanation, let's see the following example:</h5></li>
+                  <ul>
+                        <li><h6>Correct syntax: "+( 'spaghetti', ->( *( X( 'grill' ), τ ), 'pizza' ) )"</h6></li>
+
+                        <li><h6>Wrong syntax: " +( 'spaghetti', ->( *( X( 'grill' ), τ ), 'pizza' ) ) "</h6></li>
+                        <h6>Explaination: There should be no space at the beginning and the end of the entry.</h6>
+                        <li><h6>Wrong syntax: "+( 'spaghetti', *( X( 'grill' ), τ ), 'pizza' ) )"</h6></li>
+                        <h6>Explaination: The number of left and right parentheses are inconsistent.</h6>
+                        <li><h6>Wrong syntax: "+( 'spaghetti', ->(*( X( 'grill' ), τ), 'pizza' ))"</h6></li>
+                        <h6>Explaination: Not all the components are seperated by space.</h6>
+                        <li><h6>Wrong syntax: "&( 'spaghetti', ->( *( X( 'grill' ), τ ), 'pizza' ) )"</h6></li>
+                        <h6>Explaination: Undefined operator '&'.</h6>
+                    </ul>
+            </ul>
+         </h4>
+         <br/>
+          <div>
+
+              <h4>Precautions:
+
+                  <ul>
+                      <li><h5>Only when the path of an event log is submitted can we click "Statistics".</h5>
+                      </li>
+                      <li><h5>Only when the path of an event log is submitted can we click "Process Tree".</h5>
+                      </li>
+                      <li><h5>Only when the setting of simulation is submitted and "Record" is clicked can we
+                          click
+                          "Setting".</h5></li>
+                      <li><h5>Only when the setting of simulation is submitted and "Record" is clicked can we
+                          click
+                          "Start".</h5></li>
+                      <li><h5>Only when "Start" is clicked can we click "Continue".</h5></li>
+                      <li><h5>Only when "Record" is clicked can we click "Save".</h5></li>
+                      <li><h5>Only when the configuration of simulation is submitted can we click "Further Configuration".</h5></li>
+                      <li><h5>Don't forget to click "Submit" once the entry is modified.</h5></li>
+                      <li><h5>Don't forget to click "Save" in the end.</h5></li>
+                      <li><h5>The blank entry by input group will be considered as default.</h5></li>
+                  </ul>
+              </h4>
+              <br/>
+              <div>
+                  <h4>Input group:
+                      <h4>
+
+                          <ul>
+                              <li><h5>Business Day: The trace and activity will only be simulated within our
+                                  designated weekday. </h5></li>
+                              <ul>
+                                  <li><h6>By default: 1,2,3,4,5,6,7</h6></li>
+                              </ul>
+                              <li><h5>Business Hour: The trace and activity will only be simulated within our
+                                  designated hour.</h5></li>
+                              <ul>
+                                  <li><h6>By default:
+                                      0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23</h6></li>
+                              </ul>
+                              <li><h5>Limit of Trace: The maximum number of trace can be simulated within the
+                                  cycle time.</h5></li>
+                              <ul>
+                                  <li><h6>By default: float('inf')</h6></li>
+                              </ul>
+                              <li><h5>Capacity of Trace: The maximum number of trace can be simulated
+                                  simutaneously.</h5></li>
+                              <ul>
+                                  <li><h6>By default: float('inf')</h6></li>
+                              </ul>
+                              <li><h5>Limit of Activity: The maximum number of activity can be simulated
+                                  within
+                                  the supply cycle.</h5></li>
+                              <ul>
+                                  <li><h6>By default: labeled on the suffix.</h6></li>
+                              </ul>
+                              <li><h5>Capacity of Activity: The maximum number of activity can be simulated
+                                  simutaneously.</h5></li>
+                              <ul>
+                                  <li><h6>By default: float('inf')</h6></li>
+                              </ul>
+                              <li><h5>Interrupt: The abnormal trace can't end normally by default. If we enter
+                                  'y', it will end normally in our simulation.</h5></li>
+                              <ul>
+                                  <li><h6>By default: 'n'</h6></li>
+                              </ul>
+                              <li><h5>Miss: The abnormal trace can't start normally by default. If we enter
+                                  'y',
+                                  it will start normally in our simulation.</h5></li>
+                              <ul>
+                                  <li><h6>By default: 'n'</h6></li>
+                              </ul>
+                              <li><h5>Time Extension: The case will be simulated in every hour by default. If
+                                  we
+                                  enter 'n', the case will only be simulated within the time range as in the
+                                  given
+                                  log.</h5></li>
+                              <ul>
+                                  <li><h6>By default: 'y'</h6></li>
+                              </ul>
+                              <li><h5>Duration of each Activity: The simulated time of each activity.</h5>
+                              </li>
+                              <ul>
+                                  <li><h6>By default: labeled on the suffix.</h6></li>
+                              </ul>
+                              <li><h5>Arrival Rate: The waiting time of two consecutive traces.</h5></li>
+                              <ul>
+                                  <li><h6>By default: The mean trace waiting time of our given log.</h6></li>
+                              </ul>
+                              <li><h5>Supply Cycle: When the supply cycle is reached, all the counter of limit
+                                  will be
+                                  cleared and re-counted, i.e. the resource will be supplied.</h5></li>
+                              <ul>
+                                  <li><h6>By default: float('inf')</h6></li>
+                              </ul>
+                              <li><h5>Start Time: The start date of our simulation.</h5></li>
+                              <ul>
+                                  <li><h6>By default: 2021-01-01 00:00:00</h6></li>
+                              </ul>
+                              <li><h5>Number of Generated Case: The number of simulated trace.</h5></li>
+                              <ul>
+                                  <li><h6>By default: 100</h6></li>
+                              </ul>
+                          </ul>
+                    </div>
+                   </div>
+                </div>
+            </div>
+
+
+        </form>
+
+
+{% endblock %}

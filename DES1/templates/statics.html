@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div style="margin-left:30px" class="resultsize">
+        <form class="input-group">
+            <div>
+                <h4 style="margin-top:30px">The statistics of the given event log is shown as follow:</h4>
+
+                <ul>
+                    <li><h4 style="margin-top:20px">The number of trace is:</h4></li>
+                    <h5>{{ numtrace }}</h5>
+
+                    <li><h4 style="margin-top:20px">The number of activity is:</h4></li>
+                    <h5>{{ numactivity }}</h5>
+
+                    <li><h4 style="margin-top:20px">The time interval is:</h4></li>
+                    <h5>From {{ timeinterval.0 }} to {{ timeinterval.1 }}</h5>
+
+                    <li><h4 style="margin-top:20px">The mean thoughput time of trace is:</h4></li>
+                    <h5>{{ meanthoughputtime }}</h5>
+
+                    <li><h4 style="margin-top:20px">The deviation of thoughput time of trace is:</h4></li>
+                    <h5>{{ deviationthoughputtime }}</h5>
+
+                    <li><h4 style="margin-top:20px">The mean arrival ratio of trace is:</h4></li>
+                    <h5>{{ arrivalratio }}</h5>
+
+                    <li><h4 style="margin-top:20px">The mean dispersion ratio of trace is:</h4></li>
+                    <h5>{{ dispersionratio }}</h5>
+
+                    <li><h4 style="margin-top:20px">The activites are:</h4></li>
+                    <h5>{{ activitylist }}</h5>
+
+                    <li><h4 style="margin-top:20px">The worked time is:</h4></li>
+                    <h5> {{ worked_time }}</h5>
+
+
+                    <li><h4 style="margin-top:20px">Process tree:</h4></li>
+                    <h5> {{ ptree }}</h5>
+
+                    <li><h4 style="margin-top:20px">Mean duration of each activity:</h4></li>
+
+                    <h5> {{ duration }}</h5>
+
+                    <li><h4 style="margin-top:20px">The deviation of each activity:</h4></li>
+
+                    <h5> {{ deviation }}</h5>
+
+
+                    <li><h4 style="margin-top:20px">The resource class of each activity:</h4></li>
+                    <h5> {{ resourcedict.0}}</h5>
+
+                    <li><h4 style="margin-top:20px">The number of resource for each activity:</h4></li>
+                    <h5> {{ resourcedict.1}}</h5>
+
+
+
+                    <li><h4 style="margin-top:20px">The distribution of case duration:</h4></li>
+                    <p><img  src="/static/image1.gv.png" class="img-responsive center-block"></p>
+
+                    <li><h4 style="margin-top:0px">The distribution of events over time:</h4></li>
+                    <p><img class="img-responsive center-block" src="/static/image3.gv.png"></p>
+                </ul>
+                <br/>
+                </form>
+                <div class="input-group mb-3">
+                <form class="form-inline my-2 my-lg-0" action="{% url 'home' %}">
+
+                </form>
+
+            </div>
+
+        </div>
+        <br/><br/>
+    </div>
+
+{% endblock %}

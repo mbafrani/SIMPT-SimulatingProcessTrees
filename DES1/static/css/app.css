@@ -1,0 +1,99 @@
+.onepage{
+  height: 100px;
+}
+.onepage-bg{
+  height: 100%;
+  width: 1450px;
+  position: fixed;
+  background-position: center;
+  background-size: contain;
+}
+
+.infopage{
+  height: 100px;
+}
+.infopage-bg{
+  height: 100%;
+
+  width: 1450px;
+  position: fixed;
+  background-position: center;
+  background-size: contain;
+}
+#infopagebg{
+  background-image: url("/static/timg (2).jpeg");
+}
+#onepagebg{
+  background-image: url("/static/timg (2).jpeg");
+}
+
+.jumpedpage h2{
+  margin-top:60px;
+  margin-left: 63px;
+  color: #ffffff;
+}
+
+.overviewsize h2{
+  margin-left: 63px;
+  margin-top:30px;
+  color: #ffffff;
+}
+.overviewsize h3{
+  color: #ffffff;
+}
+.overviewsize h4{
+  color: #ffffff;
+}
+
+.overviewsize h5{
+  margin-left: 50px;
+  margin-top:15px;
+  color: #ffffff;
+}
+.overviewsize li{
+  margin-left: 50px;
+  font-size: 30px;
+  color: #ffffff;
+}
+
+.resultsize h2{
+  margin-top:30px;
+  margin-left:10px;
+  margin-bottom: 23px;
+  color: #ffffff;
+}
+.resultsize h3{
+  color: #ffffff;
+}
+.resultsize h4{
+  color: #ffffff;
+}
+.resultsize li{
+  font-size: 28px;
+  color: #ffffff;
+}
+
+.headfontsize h5{
+  color: #ffffff;
+}
+.headfontsize h4{
+  margin-left:0px;
+
+  color: #ffffff;
+}
+
+.simulationsize h3{
+  margin-top: 28px;
+  margin-left: 285px;
+  color: #ffffff;
+  margin-bottom: 13px;
+
+}
+.simulationsize h5{
+  color: #ffffff;
+}
+.simulationsize li{
+  margin-left: 270px;
+  font-size: 1.2rem;
+  color: #ffffff;
+}

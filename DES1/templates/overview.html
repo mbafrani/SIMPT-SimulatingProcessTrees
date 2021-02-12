@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div style="margin-left:30px" class="overviewsize">
+        <br/>
+        <form class="input-group">
+
+            <div>
+                <h4>This is the overview of our simulation:</h4>
+
+                <ul>
+                    {% for x in result %}
+                        <li><h5>{{ x }}</h5></li>
+                    {% endfor %}
+                </ul>
+              <br/>
+              <h4>For each activity in our simulation:</h4>
+              <table class="table">
+
+                <thead>
+                  <tr>
+                    <th>Activity</th>
+                    <th>Succeed</th>
+                    <th>Wait</th>
+                    <th>Interrupt</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+
+                    {% for x in table %}
+                    <tr>
+                       {% for y in x %}
+                          <td>{{y}}</td>
+                       {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+
+
+                </tbody>
+              </table>
+
+
+
+                <br/>
+            </div>
+
+        </form>
+    </div>
+    
+{% endblock %}

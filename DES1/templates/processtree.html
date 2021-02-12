@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+     <div class="if/else">
+
+      {% if window == 1 %}
+          <script>alert('Submit successfully!');</script>
+      {% endif %}
+      </div>
+          <div style="margin-left:30px">
+                  <div>
+                      <br/>
+                      <h4 style=" ">The sequence of process tree: <h4/>
+                          <h5 style=" ">{{ ptree }}<h5/>
+                  </div>
+
+
+
+        <h4 style="margin-top:15px">If you want to change the process tree, please write a new process tree: </h4>
+
+        </div>
+
+
+        <div>
+          <div style="margin-left:30px" class="row">
+              <div class=" col-sm-6 col-md-7 col-lg-8">
+        <form  class="input-group mb-3" method="POST" action="{% url 'changeptree' %}">
+            {% csrf_token %}
+          <div class="input-group mb-3">
+              <div class="input-group-prepend">
+              <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                      style=" ">Process Tree</a></span>
+              </div>
+              <input type="text" style="background-color:transparent;  " size="130" name="ptree"
+                     class="form-control"
+                     placeholder="Please make sure that the process tree is given in a correct form according to 'Guide'" aria-describedby="basic-addon7">
+          </div>
+
+            <p><input type="submit" class="btn btn-primary mb-2 mt-4" value="Change Tree"
+                      name="uploadButton"
+                      id='submitresEL'/></p>
+          </form>
+        </div>
+        </div>
+
+
+
+
+
+
+            <div style="margin-left:30px" >
+
+                <h4 style="margin-top:5px">The image of process tree: <h4/>
+                    <img style="background- position:center" src="{% static 'ptree.gv.png' %}" width="50%">
+            </div>
+
+
+  </div>
+{% endblock %}

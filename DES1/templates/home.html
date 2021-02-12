@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="container-fluid">
+        <h2 style="margin-top:15px" class="head1">Automatic Discrete Event Simulation in Process Mining</h2>
+        <h4 class="head1"> </h4>
+
+
+        <div class="if/else">
+
+         {% if window == 1 %}
+             <script>alert('Submit successfully!');</script>
+         {% endif %}
+         </div>
+        <h4 for="basic-url" style="margin-top:15px ">Input Log:</h4>
+
+
+        <div class="row">
+            <div class=" col-sm-6 col-md-7 col-lg-8">
+
+                  <form  action="{% url 'upload:delfile' %}" method="post" enctype="multipart/form-data">
+                       {% csrf_token %}
+                       <div>
+                       <input style="margin-top:5px" type="file" name="file">
+                       </div>
+
+                       <input type="submit" class="btn btn-primary mb-2 mt-4" value="Submit">
+                   </form>
+
+
+
+
+
+                           <h4 for="basic-url" style="margin-top:15px">Mapping of Log Attributes:</h4>
+
+                           <div class="row">
+                               <div class=" col-sm-6 col-md-7 col-lg-8">
+                                 <form  action="{% url 'result' %}" method="POST" enctype="multipart/form-data">
+                                     {% csrf_token %}
+                                       {% csrf_token %}
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Case ID</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="loid"
+                                                  class="form-control"
+                                                  placeholder="" aria-describedby="basic-addon7">
+                                       </div>
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Activity</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="lona"
+                                                  class="form-control"
+                                                  placeholder="" aria-describedby="basic-addon7">
+                                       </div>
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Resource</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="lore"
+                                                  class="form-control"
+                                                  placeholder="" aria-describedby="basic-addon7">
+                                       </div>
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Timestamp</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="loti"
+                                                  class="form-control"
+                                                  placeholder=""
+                                                  aria-describedby="basic-addon7">
+                                       </div>
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Start Timestamp</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="stti"
+                                                  class="form-control"
+                                                  placeholder=""
+                                                  aria-describedby="basic-addon7">
+                                       </div>
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Complete Timestamp</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="coti"
+                                                  class="form-control"
+                                                  placeholder=""
+                                                  aria-describedby="basic-addon7">
+                                       </div>
+
+
+
+                                       <div class="input-group mb-3">
+                                           <div class="input-group-prepend">
+                                           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                                                   style=" ">Transition</a></span>
+                                           </div>
+                                           <input type="text" style="background-color:transparent;  " size="130" name="lotr"
+                                                  class="form-control"
+                                                  placeholder=""
+                                                  aria-describedby="basic-addon7">
+                                       </div>
+                                       <p><input type="submit" class="btn btn-primary mb-2 mt-4" value="Submit"
+                                                 name="uploadButton"
+                                                 id='submitresEL'/></p>
+                                       </form>
+                                       </div>
+                                       </div>
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+        </div>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Privacy Tool for Process Mining</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
+    <link href="{% static 'css/mystyle.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="list-group list-group-flush">
+            <div class="sidebar-heading"><img style='height: 100%; width:100%;object-fit: contain '
+                                              src="{% static 'PADSLOGO.png' %}"/></div>
+            <a href="{% url 'info' %}" class="list-group-item list-group-item-action bg-light">Guide</a>
+            <div class="sidebar-heading" style="color:#4A4AFF"><h6>Set up Simulation</h6></div>
+            <a href="{% url 'home' %}" class="list-group-item list-group-item-action bg-light">Event Log</a>
+            <a href="{% url 'config' %}" class="list-group-item list-group-item-action bg-light">Configuration</a>
+            <a href="{% url 'base2' %}" class="list-group-item list-group-item-action bg-light">Further Configuration</a>
+
+            <div class="sidebar-heading" style="color:#4A4AFF"><h6>Information of Event Log</h6></div>
+            <a href="{% url 'statics' %}" class="list-group-item list-group-item-action bg-light">Statics</a>
+            <a href="{% url 'processtree' %}" class="list-group-item list-group-item-action bg-light">Process
+                Tree</a>
+
+
+          </div>
+            <div class="sidebar-heading" style="color:#4A4AFF"><h6>Discrete Event Simulation</h6></div>
+            <div class="list-group list-group-flush">
+            <a href="{% url 'record' %}" class="list-group-item list-group-item-action bg-light">Record</a>
+            <a href="{% url 'simulation' %}" class="list-group-item list-group-item-action bg-light">Start</a>
+            <a href="{% url 'continuee' %}" class="list-group-item list-group-item-action bg-light">Continue</a>
+            <a href="{% url 'download' %}" class="list-group-item list-group-item-action bg-light">Save</a>
+
+            <div class="sidebar-heading" style="color:#4A4AFF"><h6>Information of Simulation</h6></div>
+            <a href="{% url 'setting' %}" class="list-group-item list-group-item-action bg-light">Setting</a>
+            <a href="{% url 'result2' %}" class="list-group-item list-group-item-action bg-light">Result</a>
+            <a href="{% url 'overview' %}" class="list-group-item list-group-item-action bg-light">Overview</a>
+
+
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://www.pads.rwth-aachen.de/">About US</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href=https://www.researchgate.net>Project Link</a>
+                    </li>
+                    <!--<li class="nav-item dropdown">-->
+                    <!--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+                    <!--Dropdown-->
+                    <!--</a>-->
+                    <!--<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">-->
+                    <!--<a class="dropdown-item" href="#">Action</a>-->
+                    <!--<a class="dropdown-item" href="#">Another action</a>-->
+                    <!--</div>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+        </nav>
+        {% block content %}
+        {% endblock %}
+        {% block input %}
+        {% endblock %}
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#wrapper -->
+<!-- Bootstrap core JavaScript -->
+<script src="{% static 'css/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'css/vendor/jquery/popper.min.js' %}"></script>
+<script src="{% static 'css/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'css/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Menu Toggle Script -->
+{% block script %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="if/else">
+
+ {% if window == 1 %}
+     <script>alert('Submit successfully!');</script>
+ {% endif %}
+ </div>
+
+ <div class="row">
+   <div class=" col-sm-6 col-md-7 col-lg-8">
+   <form style="margin-top:30px;margin-left:30px" name="load" action="{% url 'submit' %}" method="POST" enctype="multipart/form-data">
+   {% csrf_token %}
+    <h4 for="basic-url" style="margin-bottom:15px">Configuration:</h4>
+           <div class="input-group mb-3">
+
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent " id="basic-addon2"><a
+           style=" ">Busniess Day</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="buda" class="form-control"
+                      placeholder="Please enter numbers from 1 to 7, using ',' to separate characters"
+                      aria-label="Log address"
+                      aria-describedby="basic-addon2">
+           </div>
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon3"><a
+           style=" ">Busniess Hour</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="buho" class="form-control"
+                      placeholder="Please enter numbers from 0 to 23, using ',' to separate characters"
+                      aria-describedby="basic-addon3">
+           </div>
+
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon8"><a
+           style=" ">Interrupt</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="in" class="form-control"
+                      placeholder="Please enter 'y' or 'n'" aria-describedby="basic-addon8">
+           </div>
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon9"><a
+           style=" ">Miss</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="mi" class="form-control"
+                      placeholder="Please enter 'y' or 'n'" aria-describedby="basic-addon9">
+           </div>
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon9a"><a
+           style=" ">Time Extension</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="tiex" class="form-control"
+                      placeholder="Please enter 'y' or 'n'" aria-describedby="basic-addon9a">
+           </div>
+
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon12"><a
+           style=" ">Supply Cycle</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="liti" class="form-control"
+                      placeholder="Please enter integer in seconds" aria-describedby="basic-addon12">
+           </div>
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon13"><a
+           style=" ">Start Time</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="stti" class="form-control"
+                      placeholder="Please enter in form of %Y-%m-%d %H:%M:%S" aria-describedby="basic-addon13">
+           </div>
+
+           <div class="input-group mb-3">
+               <div class="input-group-prepend">
+   <span class="input-group-text" style="background-color:transparent" id="basic-addon14"><a
+           style=" ">Number of Generated Case</a></span>
+               </div>
+               <input type="text" style="background-color:transparent;  " name="geca" class="form-control"
+                      placeholder="Please enter integer" aria-describedby="basic-addon14">
+           </div>
+
+           <p><input type="submit" class="btn btn-primary mb-2 mt-4" value="Submit"
+                     name="uploadButton"
+                     id='submitresEL'/></p>
+
+    </form>
+     </div>
+      </div>
+   {% endblock %}

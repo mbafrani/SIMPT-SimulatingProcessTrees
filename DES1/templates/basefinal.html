@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/css/mystyle.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {#    <link  rel="stylesheet"  type="text/css" href="/static/css/app.css" >#}
+
+    {% block title %}
+        <title>DES</title>
+    {% endblock %}
+
+</head>
+<body>
+
+<div class="onepage">
+    <div class="onepage-bg" id="onepagebg"></div>
+
+    <div class="container">
+        <div>
+        <div class="media">
+
+
+
+
+
+            <div class="media">
+            <br/>
+            <div>
+            <h2 style=" margin-top:15px">Automatic Discrete Event Simulation in Process Mining</h2>
+            <h4 style=" "> By: Shuai Jiao</h4>
+          </div>
+
+            <img style="margin-top:10;margin-left:60" src="/static/PADSLOGO.png" width="40%" height="20%">
+            <br/>
+          </div>
+
+        </div>
+        {% block content %}
+            <form class="input-group mb-3" method="POST" action="{% url 'result' %}">
+
+                <br/>
+                {% csrf_token %}
+
+                {% block log %}
+                {% endblock %}
+
+                <div class="input-group mb-3">
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'result' %}">
+                        <button type="submit" method="RESULT" class="btn btn-success" action="{% url 'result' %}">Submit
+                        </button>
+                    </form>
+                    &nbsp &nbsp
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'statics' %}">
+                        <button type="submit" method="RESULT" class="btn btn-info" action="{% url 'statics' %}">Statics
+                        </button>
+                    </form>
+                    &nbsp &nbsp
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'processtree' %}">
+                        <button type="submit" method="RESULT" class="btn btn-info" action="{% url 'processtree' %}">
+                            Process
+                            Tree
+                        </button>
+                    </form>
+                    &nbsp &nbsp
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'setting' %}">
+                        <button type="submit" method="SIMULATION" style="margin-left:653px" class="btn btn-info">Setting
+                        </button>
+                    </form>
+                    &nbsp &nbsp
+                    <form class="form-inline my-2 my-lg-0" action="{% url 'info' %}">
+                        <button type="submit" method="SIMULATION" class="btn btn-danger">Info</button>
+                    </form>
+
+
+                </div>
+
+                <form class="input-group mb-3" method="POST" action="{% url 'submit' %}">
+
+
+                    {% csrf_token %}
+
+                    {% block input %}
+                    {% endblock %}
+
+
+
+                    <div class="input-group mb-3">
+                        <form class="form-inline my-2 my-lg-0" action="{% url 'submit' %}">
+                            <button type="submit" method="views.submit" class="btn btn-success">Submit</button>
+                        </form>
+                </form>
+                &nbsp &nbsp
+                <form class="form-inline my-2 my-lg-0" action="{% url 'base2' %}">
+                    <button type="submit" method="RESULT" class="btn btn-success">Further Setting</button>
+                </form>
+
+                &nbsp &nbsp
+
+
+                <form class="form-inline my-2 my-lg-0" action="{% url 'simulation' %}">
+                    <button type="submit" method="SIMULATION" class="btn btn-outline-info">Start</button>
+                </form>
+                &nbsp &nbsp
+                <form class="form-inline my-2 my-lg-0" action="{% url 'continuee' %}">
+                    <button type="submit" method="SIMULATION" class="btn btn-outline-info">Continue</button>
+                </form>
+                &nbsp &nbsp
+                <form class="form-inline my-2 my-lg-0" action="{% url 'result2' %}">
+                    <button type="submit" method="SIMULATION" class="btn btn-info">Result</button>
+                </form>
+                &nbsp &nbsp
+                <form class="form-inline my-2 my-lg-0" action="{% url 'overview' %}">
+                    <button type="submit" method="SIMULATION" class="btn btn-info">Overview</button>
+                </form>
+                &nbsp &nbsp
+
+                <form class="form-inline my-2 my-lg-0" action="{% url 'record' %}">
+                    <button type="submit" method="SIMULATION" style="margin-left:350px" class="btn btn-warning">Record
+                    </button>
+                </form>
+                &nbsp &nbsp
+                <form class="form-inline my-2 my-lg-0" action="{% url 'download' %}">
+                    <button type="submit" method="SIMULATION" class="btn btn-warning">Save</button>
+                </form>
+
+
+                <br/>
+            </form>
+        {% endblock %}
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+</body>
+</html>

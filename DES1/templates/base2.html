@@ -65,14 +65,14 @@
 
         <h5 style=" margin-left:0px" >Limit:</h5>
 
-        {% for x in actresource %}
+        {% for x in activitylist %}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit of {{x.0}}</a></span>
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit of {{x}}</a></span>
           </div>
-          <input type="text" style="background-color:transparent;  " size="130" name="{{x.0}}l" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x}}l" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
           <div class="input-group-append">
-          <span class="input-group-text" style="background-color:transparent"><a style=" ">{{x.1}}</a></span>
+
         </div>
         </div>
         {% endfor %}

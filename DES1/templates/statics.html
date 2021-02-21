@@ -39,20 +39,53 @@
                     <li><h4 style="margin-top:20px">Process tree:</h4></li>
                     <h5> {{ ptree }}</h5>
 
-                    <li><h4 style="margin-top:20px">Mean duration of each activity:</h4></li>
+                    <li><h4 style="margin-top:20px">Mean duration and deviation of each activity:</h4></li>
+                    <table border="1.5" cellpadding="10">
+                      <thead align="center">
+                        <tr>
+                          <th>Activity</th>
+                          <th>Mean Duration in Seconds</th>
+                          <th>Mean Deviation in Seconds</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for x in duration %}
+                          <tr>
+                                <td width="200" align="center">{{x.0}}</td>
+                                <td align="center">{{x.1}}</td>
+                                <td align="center">{{x.2}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
 
-                    <h5> {{ duration }}</h5>
-
-                    <li><h4 style="margin-top:20px">The deviation of each activity:</h4></li>
-
-                    <h5> {{ deviation }}</h5>
 
 
-                    <li><h4 style="margin-top:20px">The resource class of each activity:</h4></li>
-                    <h5> {{ resourcedict.0}}</h5>
 
-                    <li><h4 style="margin-top:20px">The number of resource for each activity:</h4></li>
-                    <h5> {{ resourcedict.1}}</h5>
+
+
+
+
+                    <li><h4 style="margin-top:20px">The resource class of each activity class:</h4></li>
+                    <table border="1.5" cellpadding="10">
+                      <thead>
+                        <tr align="center">
+                          <th >Activity Class</th>
+                          <th>Resource Class</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for x in resourcedict %}
+                          <tr>
+                                <td width="200" align="center">{{x.0}}</td>
+                                <td width="400" align="center">{{x.1}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+
+
+
 
 
 

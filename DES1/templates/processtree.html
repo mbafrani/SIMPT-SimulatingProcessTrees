@@ -9,52 +9,100 @@
       {% endif %}
       </div>
           <div style="margin-left:30px">
-                  <div>
-                      <br/>
-                      <h4 style=" ">The sequence of process tree: <h4/>
-                          <h5 style=" ">{{ ptree }}<h5/>
+            <h4 style="margin-top:30px">If you want to change the process tree, please write a new process tree: </h4>
+
+
+
+
+            <div>
+              <div style="margin-left:30px;margin-top:20px" class="row">
+                  <div class=" col-sm-6 col-md-7 col-lg-8">
+            <form  class="input-group mb-3" method="POST" action="{% url 'changeptree' %}">
+                {% csrf_token %}
+              <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                  <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
+                          style=" ">Process Tree</a></span>
                   </div>
-
-
-
-        <h4 style="margin-top:15px">If you want to change the process tree, please write a new process tree: </h4>
-
-        </div>
-
-
-        <div>
-          <div style="margin-left:30px" class="row">
-              <div class=" col-sm-6 col-md-7 col-lg-8">
-        <form  class="input-group mb-3" method="POST" action="{% url 'changeptree' %}">
-            {% csrf_token %}
-          <div class="input-group mb-3">
-              <div class="input-group-prepend">
-              <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a
-                      style=" ">Process Tree</a></span>
+                  <input type="text" style="background-color:transparent;  " size="130" name="ptree"
+                         class="form-control"
+                         placeholder="Please make sure that the process tree is given in a correct form according to 'Guide'" aria-describedby="basic-addon7">
               </div>
-              <input type="text" style="background-color:transparent;  " size="130" name="ptree"
-                     class="form-control"
-                     placeholder="Please make sure that the process tree is given in a correct form according to 'Guide'" aria-describedby="basic-addon7">
-          </div>
 
-            <p><input type="submit" class="btn btn-primary mb-2 mt-4" value="Change Tree"
-                      name="uploadButton"
-                      id='submitresEL'/></p>
-          </form>
-        </div>
-        </div>
-
-
-
-
-
-
-            <div style="margin-left:30px" >
-
-                <h4 style="margin-top:5px">The image of process tree: <h4/>
-                    <img style="background- position:center" src="{% static 'ptree.gv.png' %}" width="50%">
+                <p style="margin-top:-20px"><input type="submit" class="btn btn-primary mb-2 mt-4" value="Change Tree"
+                          name="uploadButton"
+                          id='submitresEL'/></p>
+              </form>
+            </div>
             </div>
 
 
-  </div>
+
+
+
+
+
+
+
+      </div>
+                  <div>
+
+                      <h4 style=" ">The sequence of the process tree: <h4/>
+                          <h5 style=" ">{{ ptree }}<h5/>
+                      <br/>
+                  </div>
+                  <div style="margin-left:0px" >
+
+                      <h4 style="margin-top:5px">The image of process tree: <h4/>
+                          <div>
+                          <img style="background- position:center" src="{% static 'ptree.gv.png' %}" width="80%">
+                  </div>
+
+                  </div>
+                  <div style="margin-top:50px;margin-bottom:20px"><h4>Process Routing in the Process Tree: <h4/></div>
+
+                  <table border="1.5" cellpadding="10">
+                    <thead>
+                      <tr>
+                        <th>Loops in the Process Tree</th>
+                        <th>Expected Number per Trace</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for tree,num in loopdict.items %}
+                        <tr>
+                              <td width="800">{{tree}}</td>
+                              <td align="center">{{num}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+
+                  <br/>
+                  <br/>
+
+                  <table border="1.5" cellpadding="10">
+                    <thead>
+                      <tr>
+                        <th>Components in the Process Tree</th>
+                        <th>Routing Probability</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for tree,num in evaluation.items %}
+                        <tr>
+                              <td width="800">{{tree}}</td>
+                              <td align="center">{{num}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                  <br/>
+                  <br/>
+
+
+
+
+
+
 {% endblock %}

@@ -1,0 +1,130 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 750px;
+            background-color: black;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Ellen", "label": "Ellen", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003eEllen Output Links: \u003c/h3\u003e\u003cbr\u003e::: Sara ::: Mike", "value": 2}, {"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Mike", "label": "Mike", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003eMike Output Links: \u003c/h3\u003e\u003cbr\u003e::: Sean ::: Ellen ::: Pete ::: Sara ::: Mike", "value": 5}, {"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Sara", "label": "Sara", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003eSara Output Links: \u003c/h3\u003e\u003cbr\u003e::: Sean ::: Ellen ::: Pete ::: Sara ::: Mike ::: Sue", "value": 6}, {"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Pete", "label": "Pete", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003ePete Output Links: \u003c/h3\u003e\u003cbr\u003e::: Sara ::: Mike ::: Sue", "value": 3}, {"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Sean", "label": "Sean", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003eSean Output Links: \u003c/h3\u003e\u003cbr\u003e::: Sara ::: Pete", "value": 2}, {"color": {"highlight": {"background": "#41e9df", "border": "#3de975"}}, "font": {"color": "#3de975"}, "id": "Sue", "label": "Sue", "labelHighlightBold": true, "shape": "dot", "title": "\u003ch3\u003eSue Output Links: \u003c/h3\u003e\u003cbr\u003e::: Mike ::: Pete", "value": 2}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Ellen", "title": 0.08333333333333333, "to": "Mike", "value": 0.08333333333333333}, {"arrows": "to", "from": "Ellen", "title": 0.027777777777777776, "to": "Sara", "value": 0.027777777777777776}, {"arrows": "to", "from": "Mike", "title": 0.05555555555555555, "to": "Ellen", "value": 0.05555555555555555}, {"arrows": "to", "from": "Mike", "title": 0.027777777777777776, "to": "Mike", "value": 0.027777777777777776}, {"arrows": "to", "from": "Mike", "title": 0.027777777777777776, "to": "Pete", "value": 0.027777777777777776}, {"arrows": "to", "from": "Mike", "title": 0.08333333333333333, "to": "Sara", "value": 0.08333333333333333}, {"arrows": "to", "from": "Mike", "title": 0.05555555555555555, "to": "Sean", "value": 0.05555555555555555}, {"arrows": "to", "from": "Pete", "title": 0.05555555555555555, "to": "Mike", "value": 0.05555555555555555}, {"arrows": "to", "from": "Pete", "title": 0.08333333333333333, "to": "Sara", "value": 0.08333333333333333}, {"arrows": "to", "from": "Pete", "title": 0.027777777777777776, "to": "Sue", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sara", "title": 0.1111111111111111, "to": "Ellen", "value": 0.1111111111111111}, {"arrows": "to", "from": "Sara", "title": 0.05555555555555555, "to": "Mike", "value": 0.05555555555555555}, {"arrows": "to", "from": "Sara", "title": 0.027777777777777776, "to": "Pete", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sara", "title": 0.08333333333333333, "to": "Sara", "value": 0.08333333333333333}, {"arrows": "to", "from": "Sara", "title": 0.027777777777777776, "to": "Sean", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sara", "title": 0.027777777777777776, "to": "Sue", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sean", "title": 0.027777777777777776, "to": "Pete", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sean", "title": 0.05555555555555555, "to": "Sara", "value": 0.05555555555555555}, {"arrows": "to", "from": "Sue", "title": 0.027777777777777776, "to": "Mike", "value": 0.027777777777777776}, {"arrows": "to", "from": "Sue", "title": 0.027777777777777776, "to": "Pete", "value": 0.027777777777777776}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges",
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -80000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

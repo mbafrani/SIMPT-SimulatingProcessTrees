@@ -1,12 +1,13 @@
 # SIMPT-SimulatingProcessTrees
-We present a new tool that enables process owners to extract all the process aspects from their historical event data automatically, change these aspects, and re-run the process automatically using an interface. The combination of process mining and simulation techniques provides new evidence-driven ways to explore "what-if" questions. Therefore, assessing the effects of changes in process improvement is also possible. Our Python-based web-application provides a complete interactive platform to improve the flow of activities, i.e., process tree, along with possible changes in all the derived activity, resource, and process parameters.bThese parameters are derived directly from an event log without user-background knowledge.
+We present a new tool that enables process owners to extract all the process aspects from their historical event data automatically, change these aspects, and re-run the process automatically using an interface. The combination of process mining and simulation techniques provides new evidence-driven ways to explore "what-if" questions. Therefore, assessing the effects of changes in process improvement is also possible. Our Python-based web-application provides a complete interactive platform to improve the flow of activities, i.e., process tree, along with possible changes in all the derived activity, resource, and process parameters. These parameters are derived directly from an event log without user-background knowledge.
 ## How to Run:
-The tool is a Django based tool, run it via browser:
+The tool is a Python-based web application based on the Django framework, to run the app:
 - In the project directory
   - cmd: *python.exe manage.py runserver*
 - Use *127.0.0.1:8000* in the browser
 
 ## How to Use:
+In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation process parameters and how to use the app.
 
 ### Simulation Steps:
 

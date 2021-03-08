@@ -15,7 +15,7 @@ from pm4py.visualization.graphs import visualizer as graphs_visualizer
 from django.http import HttpResponse
 from uploadFile import views as uploadview
 from pm4py.algo.enhancement.roles import algorithm as roles_discovery
-from pm4py.algo.enhancement.roles.algorithm import pandas as rpd
+from pm4py.algo.enhancement.roles.variants import pandas as rpd
 #from django.shortcuts import render_to_response
 
 
@@ -106,6 +106,38 @@ def result(request):
     global Actresource
     global inputname
     global ProcessTree
+
+
+    global capacity
+    global tracelimit
+    global activitiescapacity
+    global activitylimit
+    global businesshour
+    global businessday
+    global stop
+    global miss
+    global limittime
+    global starttime2
+    global numtrace
+    global tiex
+
+    capacity= ''
+    tracelimit= ''
+
+    activitiescapacity= ''
+    activitylimit= ''
+    businesshour= ''
+    businessday= ''
+    stop= ''
+    miss= ''
+    limittime= ''
+    starttime2= ''
+    numtrace= ''
+
+    RESULT= ''
+    tiex= ''
+
+
     #isclick = 0
     #Watichange = 0
     #logadr = request.POST.get('load')
@@ -133,7 +165,8 @@ def result(request):
     if logtran == '':
         logtran = "lifecycle:transition"
     ADRESS = logadr
-    print(inputname[-3:],"inputname[:-3]")
+    #print(inputname[-3:],"inputname[:-3]")
+
     log = infra.recieve_and_convert_log.convert_log(logadr,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
     ptree = infra.recieve_and_convert_log.get_processtree(log)
     duration = infra.recieve_and_convert_log.get_duration(log)
@@ -141,8 +174,9 @@ def result(request):
     deviation = infra.recieve_and_convert_log.get_deviation(duration,log)
     Deviation = deviation
     waitingtime = infra.recieve_and_convert_log.waitingtime(log)
+    print(waitingtime,'line 177')
     Waitingtime = waitingtime
-    log = infra.recieve_and_convert_log.convert_log(logadr,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
+    #log = infra.recieve_and_convert_log.convert_log(logadr,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
     ptree = infra.recieve_and_convert_log.get_processtree(log)
     ProcessTree = ptree
     #frequency = infra.recieve_and_convert_log.get_waitinhour(log,waitingtime,'n',Watichange)
@@ -155,7 +189,6 @@ def result(request):
     return render(request,'home.html',{'window':window})
 
 def statics(request):
-
 
     logadr = ADRESS
     log = infra.recieve_and_convert_log.convert_log(logadr,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
@@ -175,7 +208,7 @@ def statics(request):
     worked_time = bh_object.getseconds()
 
     #log_path = os.path.join("tests","input_data","receipt.xes")
-
+    initialtrace = infra.recieve_and_convert_log.initialtrace(log)
     x, y = case_statistics.get_kde_caseduration(log, parameters={constants.PARAMETER_CONSTANT_TIMESTAMP_KEY: "time:timestamp"})
     gviz1 = graphs_visualizer.apply_plot(x, y, variant=graphs_visualizer.Variants.CASES)
     gviz2 = graphs_visualizer.apply_semilogx(x, y, variant=graphs_visualizer.Variants.CASES)
@@ -202,7 +235,17 @@ def statics(request):
     arrivalratio = infra.recieve_and_convert_log.statics(log)[5]
     dispersionratio = infra.recieve_and_convert_log.statics(log)[6]
     resourcedict = infra.recieve_and_convert_log.initialresource1(log)
+    initialcapacity = infra.recieve_and_convert_log.computecapacity(log)
+    initiallimit = infra.recieve_and_convert_log.initiallimit(log)[0]
+    initialcaplim = []
+    for i in range(len(initialcapacity)):
+        initialcaplim.append((initialcapacity[i][0],initialcapacity[i][1],initiallimit[i][1]))
+    #print(intialcapacity,"line 205")
     Actresource = roles_discovery.apply(log,variant=None, parameters={rpd.Parameters.RESOURCE_KEY:logreso})
+    list0 = []
+    infra.recieve_and_convert_log.notdoact(ptree,list0)
+    handover = infra.recieve_and_convert_log.getactivityresourcecount(log,list0,logname,logreso)[1]
+
 
 
 
@@ -213,7 +256,8 @@ def statics(request):
     context = {'log':log,'ptree':ptree,'duration':duration,'deviation':deviation,\
     'worked_time':worked_time,'numtrace':numtrace,'numactivity':numactivity,'activitylist':activitylist,\
     'timeinterval':timeinterval,'meanthoughputtime':meanthoughputtime,\
-    'deviationthoughputtime':deviationthoughputtime,'arrivalratio':arrivalratio,'dispersionratio':dispersionratio,'resourcedict':Actresource}
+    'deviationthoughputtime':deviationthoughputtime,'arrivalratio':arrivalratio,\
+    'dispersionratio':dispersionratio,'resourcedict':Actresource,'handover':handover,"initialcaplim":initialcaplim,'initialtrace':initialtrace}
     return render(request,'statics.html',context)
 
 def simulation(request):
@@ -245,6 +289,7 @@ def simulation(request):
     #print(Duration,'~~~~~~~~~~~~~~@')
     #(capacity,activitiescapacity1,businesshour,businessday,stop,activitylimit1,tracelimit,miss,limittime)
     info = infra.recieve_and_convert_log.get_simulatorinformation(log,capacity,activitiescapacity,businesshour,businessday,stop,activitylimit,tracelimit,miss,limittime)
+    print(info[1],info[5],info[8],"line 255")
     startID=0
     starttime = 365*51*24*60*60+13*24*60*60
     #print(ProcessTree.operator,"view line 243")
@@ -310,36 +355,43 @@ def setting(request):
     settinglist = [capacity,tracelimit,Waitingtime,activitiescapacity,activitylimit,\
     businesshour,businessday,stop,miss,limittime,starttime2,numtrace,\
     tiex,Duration,'Frequency',Deviation,ADRESS,inputname,attributelist]
+    print(activitylimit,activitiescapacity,'line 321')
 
+
+    log = infra.recieve_and_convert_log.convert_log(ADRESS,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
     if capacity == '' or capacity == None:
-        settinglist[0] = 'infinity'
+        settinglist[0] = infra.recieve_and_convert_log.initialtrace(log)[0]
     if tracelimit == '' or tracelimit == None:
-        settinglist[1] = 'infinity'
+        settinglist[1] = infra.recieve_and_convert_log.initialtrace(log)[0]
 
     if activitiescapacity == '':
-        caplist = []
+        caplist = infra.recieve_and_convert_log.computecapacity(log)
+        '''
         for i in range(len(Duration)):
             caplist.append((Duration[i][0],'infinity'))
+        '''
     else:
         caplist = []
         for i in range(len(Duration)):
             if activitiescapacity[i] == '':
-              caplist.append((Duration[i][0],'infinity'))
+              caplist.append(infra.recieve_and_convert_log.computecapacity(log)[i][1])
             else:
-              caplist.append((Duration[i][0],activitiescapacity[i]))
+              caplist.append(activitiescapacity[i])
     settinglist[3] = caplist
 
     if activitylimit == '':
-        limlist = []
+        limlist = infra.recieve_and_convert_log.initiallimit(log)[0]
+        '''
         for i in range(len(Duration)):
             limlist.append((Duration[i][0],'infinity'))
+        '''
     else:
         limlist = []
         for i in range(len(Duration)):
             if activitylimit[i] == '':
-              limlist.append((Duration[i][0],'infinity'))
+              limlist.append(infra.recieve_and_convert_log.initiallimit(log)[0][i][1])
             else:
-              limlist.append((Duration[i][0],activitylimit[i]))
+              limlist.append(activitylimit[i])
     settinglist[4] = limlist
 
 
@@ -352,7 +404,7 @@ def setting(request):
     if miss == '':
         settinglist[8] = 'n'
     if limittime == '':
-        settinglist[9] = 'infinity'
+        settinglist[9] = infra.recieve_and_convert_log.initiallimit(log)[1]
     if starttime2 == '':
         settinglist[10] = '2021-01-01 00:00:00'
     if numtrace == '':
@@ -438,6 +490,8 @@ def submit(request):
     Deviation = deviation
     waitingtime = infra.recieve_and_convert_log.waitingtime(log)
     Waitingtime = waitingtime
+    capacity = infra.recieve_and_convert_log.initialtrace(log)[0]
+    tracelimit = infra.recieve_and_convert_log.initialtrace(log)[1]
 
 
     #capacity = request.POST.get('catr')
@@ -454,7 +508,9 @@ def submit(request):
     starttime2 = request.POST.get('stti')
     numtrace = request.POST.get('geca')
     tiex = ''
-    #capacity = request.POST.get('trca')
+    activitiescapacity = infra.recieve_and_convert_log.computecapacity(log)
+    activitylimit = infra.recieve_and_convert_log.initiallimit(log)[0]
+
     #tracelimit = request.POST.get('trli')
     if tiex == '':
         tiex1 = 'y'
@@ -472,9 +528,9 @@ def submit(request):
         #print(ele,ele[0],Actresource[ele[0]],numtrace,oldnumtrace)
         activitylimit.append(int(Actresource[ele[0]]*numtrace)/oldnumtrace)
     '''
-    activitiescapacity = ''
+    #activitiescapacity = ''
     activitylimit = ''
-    capacity = ''
+    activitiescapacity = infra.recieve_and_convert_log.computecapacity(log)
     tracelimit = ''
 
 
@@ -516,6 +572,8 @@ def config(request):
 
 def base2(request):
     global ADRESS
+    global activitiescapacity
+    global activitylimit
 
     logadr = ADRESS
 
@@ -524,6 +582,11 @@ def base2(request):
     duration = infra.recieve_and_convert_log.get_duration(log)
     deviation = infra.recieve_and_convert_log.get_deviation(duration,log)
     waitingtime = infra.recieve_and_convert_log.waitingtime(log)
+    activitiescapacity = infra.recieve_and_convert_log.computecapacity(log)
+
+    activitylimit = infra.recieve_and_convert_log.initiallimit(log)[0]
+    capacity = infra.recieve_and_convert_log.initialtrace(log)[0]
+    tracelimit = infra.recieve_and_convert_log.initialtrace(log)[1]
     #frequency = infra.recieve_and_convert_log.get_waitinhour(log,waitingtime,'n',Watichange)
     activitylist=[x[0] for x in duration]
     actresource = []
@@ -531,8 +594,13 @@ def base2(request):
     for i,ele in enumerate(duration):
         actresource.append((ele[0],activitylimit[i]))
     '''
+    duration1 = []
+    for x in duration:
+        duration1.append((x[0],round(x[1],2)))
     window = 0
-    context = {'log':log,'ptree':ptree,'duration':duration,'deviation':deviation,'waitingtime':waitingtime,'activitylist':activitylist,'actresource':Actresource,'window':window}
+    #print(activitiescapacity,"line 545")
+    context = {'log':log,'ptree':ptree,'duration':duration1,'deviation':deviation,'waitingtime':waitingtime,'activitylist':activitylist,\
+    'actresource':Actresource,'window':window,"initialcapacity":activitiescapacity,'initiallimit':activitylimit,'capacity':capacity,'limit':tracelimit}
     return render(request,'base2.html',context)
 
 def submit2(request):
@@ -548,14 +616,20 @@ def submit2(request):
 
     capacity = request.POST.get('trca1')
     tracelimit = request.POST.get('trli1')
+    logadr = ADRESS
+    log = infra.recieve_and_convert_log.convert_log(logadr,logname,logtime,logtran,logstart,logcompl,logreso,logid,inputname[-3:])
+    if capacity == '':
+        capacity = infra.recieve_and_convert_log.initialtrace(log)[0]
+    if tracelimit == '':
+        tracelimit = infra.recieve_and_convert_log.initialtrace(log)[1]
     a = request.POST.get('trdu1')
     if a != '':
         Waitingtime = int(a)
         Watichange = 1
 
-    activitiescapacity = []
+    activitiescapacity1 = []
     #activitylimit1 = []
-    activitylimit = []
+    activitylimit1 = []
     activityduration = []
 
     for ele in Duration:
@@ -565,16 +639,28 @@ def submit2(request):
       actcap = request.POST.get(name)
       actlim = request.POST.get(name2)
       actdur = request.POST.get(name3)
-      activitiescapacity.append(actcap)
+      activitiescapacity1.append(actcap)
       #activitylimit1.append(actlim)
-      activitylimit.append(actlim)
+      activitylimit1.append(actlim)
       activityduration.append(actdur)
 
     for i in range(len(Duration)):
         if activityduration[i] == '':
-            continue
+            a = 1
         else :
             Duration[i] = (Duration[i][0],int(activityduration[i]))
+        if activitiescapacity1[i] == '':
+            a = 1
+        else :
+            activitiescapacity[i] = (Duration[i][0],int(activitiescapacity1[i]))
+
+        if activitylimit1[i] == '':
+            a = 1
+            #activitylimit[i] = (Duration[i][0],'inf')
+        else :
+            activitylimit[i] = (Duration[i][0],int(activitylimit1[i]))
+    print(activitylimit,activitiescapacity,'line 609')
+
     '''
     for i in range(len(activitylimit1)):
         if activitylimit1[i] == '':
@@ -589,14 +675,23 @@ def submit2(request):
     deviation = infra.recieve_and_convert_log.get_deviation(duration,log)
     waitingtime = infra.recieve_and_convert_log.waitingtime(log)
     #frequency = infra.recieve_and_convert_log.get_waitinhour(log,waitingtime,'n',Watichange)
+    initialcapacity = infra.recieve_and_convert_log.computecapacity(log)
+    initiallimit = infra.recieve_and_convert_log.initiallimit(log)[0]
+    initialtracecapacity = infra.recieve_and_convert_log.initialtrace(log)[0]
+    initialtracelimit = infra.recieve_and_convert_log.initialtrace(log)[1]
     activitylist=[x[0] for x in duration]
     actresource = []
     '''
     for i,ele in enumerate(duration):
         actresource.append((ele[0],activitylimit[i]))
     '''
+    duration1 = []
+    for x in duration:
+        duration1.append((x[0],round(x[1],2)))
     window = 1
-    context = {'log':log,'ptree':ptree,'duration':duration,'deviation':deviation,'waitingtime':waitingtime,'activitylist':activitylist,'activitylimit':activitylimit,'window':window}
+    context = {'log':log,'ptree':ptree,'duration':duration1,'deviation':deviation,\
+    'waitingtime':waitingtime,'activitylist':activitylist,'activitylimit':activitylimit,\
+    'window':window,"initialcapacity":initialcapacity,'initiallimit':initiallimit,'capacity':initialtracecapacity,'limit':initialtracelimit}
 
     return render(request,'base2.html',context)
 

@@ -61,8 +61,8 @@ def generate_log(pt0,evaluatetreelist, loopdict0, no_traces=100):
     #print(pt,'line 56')
     # assigns to each event an increased timestamp from 1970
     curr_timestamp = 10000000
-
-    for i in range(no_traces):
+    itrace = 0
+    while itrace < no_traces:
         '''
         loopdict = deepcopy(loopdict0)
         for key,value in loopdict.items():
@@ -96,7 +96,7 @@ def generate_log(pt0,evaluatetreelist, loopdict0, no_traces=100):
         ex_seq_labels = pt_util.project_execution_sequence_to_labels(ex_seq)
         #print(ex_seq_labels,'ex_seq_labels')
         trace = Trace()
-        trace.attributes[xes.DEFAULT_NAME_KEY] = str(i)
+        trace.attributes[xes.DEFAULT_NAME_KEY] = str(itrace)
         #print('line 67')
         for label in ex_seq_labels:
             event = Event()
@@ -106,8 +106,9 @@ def generate_log(pt0,evaluatetreelist, loopdict0, no_traces=100):
             trace.append(event)
             #print(event,'line 73')
             curr_timestamp = curr_timestamp + 1
-
-        log.append(trace)
+        if len(trace) != 0:
+           log.append(trace)
+           itrace += 1
 
     return log
 
@@ -188,7 +189,7 @@ def execute_enabled(enabledlist,enabled,open,closed,evaluatetreelist,loopdict,ex
     if enabledlist[-1] == set([]):
         enabledlist.pop()
 
-
+    print(vertex,'line 191')
     #print(vertex,enabled,enabledlist,"vertex and enable line 167")
     enabled.remove(vertex)
 
@@ -200,8 +201,10 @@ def execute_enabled(enabledlist,enabled,open,closed,evaluatetreelist,loopdict,ex
         #print(vertex.children,'vertex.children')
 
         if vertex.operator is pt_opt.Operator.LOOP:
+            '''
             while len(vertex.children) < 3:
                 vertex.children.append(ProcessTree(parent=vertex))
+            '''
             #vertex1 = findsimilartree(vertex,evaluatetreelist)
             #if evaluatetreelist[vertex1] >= 1:
                #evaluatetreelist[vertex1] = evaluatetreelist[vertex1]-1
@@ -215,6 +218,7 @@ def execute_enabled(enabledlist,enabled,open,closed,evaluatetreelist,loopdict,ex
             c = vertex.children[0]
             enabled.add(c)
             enabledlist.append(set([c]))
+            print(enabledlist,'line 218')
             execution_sequence.append((c, pt_st.State.ENABLED))
             #Leaveloop = 0
             #print(vertex,c,"here is loop and sequence")
@@ -407,6 +411,7 @@ def process_closed(enabledlist, closed_node, enabled, open, closed, execution_se
         if should_close(vertex, closed, closed_node, loopdict):
             close(enabledlist,vertex, enabled, open, closed, execution_sequence,loopdict, evaluatetreelist)
 
+
         else:
             enable = None
             if vertex.operator is pt_opt.Operator.SEQUENCE:
@@ -416,14 +421,14 @@ def process_closed(enabledlist, closed_node, enabled, open, closed, execution_se
                 #if loopdict[vertex1][0] == 'overone':
                    #loopdict[vertex1] = (loopdict[vertex1][0],loopdict[vertex1][1]-1)
                 if vertex.children.index(closed_node) == 0:
-                    if len(vertex.children) == 0:
+                    if len(vertex.children) == 1:
                         vertex1 = findsimilartree(vertex,loopdict)
                         '''
                         if loopdict[vertex1] >= 1:
                            loopdict[vertex1] = loopdict[vertex1]-1
                         '''
                         enable = vertex.children[0]
-                    elif len(vertex.children) == 1:
+                    elif len(vertex.children) == 2:
                         if vertex.children[1].label == None and vertex.children[1].operator == None:
                             vertex1 = findsimilartree(vertex,loopdict)
                             if loopdict[vertex1] >= 1:
@@ -431,6 +436,7 @@ def process_closed(enabledlist, closed_node, enabled, open, closed, execution_se
                             enable =  vertex.children[0]
                         else:
                             enable = vertex.children[1]
+                        print(enable,'line 434')
                     else:
                         if vertex.children[1].label != None and vertex.children[2].label != None:
                             vertex1 = findsimilartree(vertex.children[1],loopdict)
@@ -457,10 +463,11 @@ def process_closed(enabledlist, closed_node, enabled, open, closed, execution_se
                     if loopdict[vertex1] >= 1:
                        loopdict[vertex1] = loopdict[vertex1]-1
                     enable = vertex.children[0]
-            if enable is not None:
+            if not enable is None:
                 enabled.add(enable)
                 enabledlist.append(set([enable]))
                 execution_sequence.append((enable, pt_st.State.ENABLED))
+            print(enable,'line 467')
 
 
 def should_close(vertex, closed, child, loopdict):
@@ -518,7 +525,8 @@ def should_close(vertex, closed, child, loopdict):
                return False
 
             else:
-               Leaveloop = 0
+
+               Leaveloop = 1
                return True
 
     elif vertex.operator is pt_opt.Operator.XOR:

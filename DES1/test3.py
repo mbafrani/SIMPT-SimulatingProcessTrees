@@ -1,10 +1,10 @@
-'''
+
 from pm4py.objects.log.importer.xes import importer as xes_importer
 from pm4py.algo.discovery.inductive import algorithm as inductive_miner
 from pm4py.visualization.process_tree import visualizer as pt_visualizer
 #from pm4py.objects.process_tree.exporter import exporter as ptml_exporter
 import infrastructure as infra
-'''
+from pm4py.objects.process_tree import semantics
 '''
 log0 = xes_importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/test.xes')
 log1 = xes_importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/evalunew.xes')
@@ -30,6 +30,7 @@ pt_visualizer.save(gviz2,"/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.202
 ptml_exporter.apply(tree0, "/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/evaluorigin.ptml")
 ptml_exporter.apply(tree1, "/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/evalunew.ptml")
 ptml_exporter.apply(tree2, "/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/evaluold.ptml")
+'''
 '''
 ptree = "+( 'check ticket', X( 'examine casually', 'examine thoroughly' ) ), 'decide' ), 'reinitiate request' )"
 k = 0
@@ -63,3 +64,22 @@ for ele in treelist:
     #treelist1.append()
 
 print(treelist,treelist1,"treelist1")
+'''
+'''
+log = xes_importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/test.xes')
+infra.recieve_and_convert_log.logname = "concept:name"
+infra.recieve_and_convert_log.logtime = "time:timestamp"
+
+x = infra.recieve_and_convert_log.computecapacity1(log)
+print(x,"initialcapacity")
+'''
+#treelist = "+( 'A', 'G', ->( *( X( 'B' ), 'C' ), 'D', X( 'E' ), 'F' ) )"
+treelist = "+( 'A', 'G', ->( 'B', 'C', 'D', 'E', 'F' ) )"
+treelist1 = treelist.split(" ")
+tree = infra.recieve_and_convert_log.convertptree(treelist1,None,0)
+print(tree)
+log = semantics.generate_log(tree, no_traces=10)
+for trace in log:
+    print('~~~~~')
+    for ele in trace:
+        print(ele['concept:name'])

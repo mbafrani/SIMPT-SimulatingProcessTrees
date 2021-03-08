@@ -40,13 +40,17 @@ print(ptree,'~~~~~',ptree._children,'here is ptree')
 gviz = pt_visualizer.apply(ptree, parameters={pt_visualizer.Variants.WO_DECORATION.value.Parameters.FORMAT: "png"})
 pt_visualizer.view(gviz)
 '''
-log0 = importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/test.xes')
 '''
-log_csv = pd.read_csv('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/result2.csv')
+log0 = importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/testfile.csv')
+'''
+
+
+log_csv = pd.read_csv('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/testfile.csv', sep=';', encoding='utf-8')
 log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
+log_csv = log_csv.sort_values('time:timestamp')
 log0 = log_converter.apply(log_csv)
-xes_exporter.apply(log0, '/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/result4.xes')
-'''
+#xes_exporter.apply(log0, '/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/result4.xes')
+
 
 tree = inductive_miner.apply_tree(log0)
 print(tree,"line 52")
@@ -359,7 +363,7 @@ evaluatetreelist[tree] = 1
 evaluatetree(tree,countloop,actdict,1,evaluatetreelist)
 print(evaluatetreelist,"evaluatetree")
 print("countloopt", countloop,"countloopt")
-resultlog = _semantics.generate_log(tree,evaluatetreelist, countloop, no_traces=100)
+resultlog = _semantics.generate_log(tree,evaluatetreelist, countloop, no_traces=10)
 
 dataframe = log_converter.apply(resultlog, variant=log_converter.Variants.TO_DATA_FRAME)
 dataframe.to_csv('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/testfile/result3.csv')

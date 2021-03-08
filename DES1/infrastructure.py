@@ -1,5 +1,5 @@
 import pandas as pd
-from pm4py.algo.enhancement.roles.algorithm import pandas as rpd
+from pm4py.algo.enhancement.roles.variants import pandas as rpd
 from pm4py.objects.log.util import dataframe_utils
 from pm4py.objects.conversion.log import converter as log_converter
 import os
@@ -12,9 +12,10 @@ from pm4py.algo.discovery.inductive import algorithm as inductive_miner
 from pm4py.algo.filtering.log.variants import variants_filter
 #from pm4py.algo.filtering.pandas.attributes import attributes_filter
 from pm4py.algo.filtering.log.timestamp import timestamp_filter
-
+import time
+import eventlet
 from pm4py.objects.conversion.log import converter as log_converter
-
+import math
 import simpy
 '''
 import process
@@ -51,7 +52,7 @@ global Log
 
 class recieve_and_convert_log:
     """docstring for recieve_and_print_log."""
-
+    @classmethod
     def __init__(self):
         self.activity_duration = []
         self.arrival_rate = None
@@ -73,6 +74,7 @@ class recieve_and_convert_log:
         self.logid = "concept:name"
         self.treeevaluation = None
         self.loopdict = None
+        self.adr = None
 
     @classmethod
     def convert_log(self,adr,lona,loti,lotr,lost,loco,lore,loid,xorc):
@@ -85,19 +87,36 @@ class recieve_and_convert_log:
         self.logcoti = loco
         self.logreso = lore
         self.logid = loid
+        self.adr = adr
 
         if xorc == "xes":
           log = importer.apply(adr+'.xes')
           #print(log)
           #self.event_log = log
         elif xorc == "csv":
-          log_csv = pd.read_csv(adr+'.csv', sep=',')
-          #log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
-          #self.event_log = log_converter.apply(log_csv)
-          log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
-          log_csv = log_csv.sort_values('time:timestamp')
-          log = log_converter.apply(log_csv)
-          #print(self.event_log)
+          try:
+              log_csv = pd.read_csv(adr+'.csv', sep=',', encoding='utf-8')
+              #log_csv = pd.read_csv(adr+'.csv', 'r', encoding='utf-8', error_bad_lines=False, lineterminator="\n")
+              #log_csv.head()
+              #print(log_csv,'line 100')
+
+              #log_csv[u'time:timestamp'] = log_csv[u'time:timestamp'].astype(str)
+              #print(log_csv[u'time:timestamp'],"line 103")
+              #log_csv[u'time:timestamp'] = log_csv[u'time:timestamp'].replace("/" , "-")
+              #log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
+              #self.event_log = log_converter.apply(log_csv)
+              #print(log_csv,'line 105')
+              #print(log_csv['time:timestamp'],'loti is line 107')
+              #log_csv[loti] = log_csv[loti].replace('/','-')
+              log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
+              log_csv = log_csv.sort_values(loti)
+              log = log_converter.apply(log_csv)
+          except:
+              log_csv = pd.read_csv(adr+'.csv', sep=';', encoding='utf-8')
+              log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
+              log_csv = log_csv.sort_values(loti)
+              log = log_converter.apply(log_csv)
+          print(log,'line 114')
         #return self.event_log
         Log = log
         return log
@@ -130,15 +149,20 @@ class recieve_and_convert_log:
                 x = caldur.oneortwo(log,self.logtransi)
                 if x == 2:
                     duration = caldur.getaverageduration(log,self.logname,self.logtime,self.logtransi)
+                    print('line 152')
                 if x == 1:
                     duration = caldur.getaverageduration2(log,self.logname,self.logtime)
+                    print('line 155')
             except:
                 duration = caldur.getaverageduration2(log,self.logname,self.logtime)
+                print('line 158')
         else:
             try:
               duration = caldur.getaverageduration3(log,self.logname,self.logtime,self.logstti,self.logcoti)
+              print('line 159')
             except:
               self.logtime = self.logcoti
+              print('line 161')
               duration = caldur.getaverageduration2(log,self.logname,self.logtime)
         activities = attributes_filter.get_attribute_values(log, self.logname)
         activitiesList=[]
@@ -266,7 +290,7 @@ class recieve_and_convert_log:
 
 
 
-        '''
+
         if limittime == '':
             timeinterval = self.statics(log)[3]
             fmt = '%Y-%m-%d %H:%M:%S'
@@ -275,19 +299,146 @@ class recieve_and_convert_log:
         else:
             limittime = int(limittime)
         print(limittime,'limittime')
+
         '''
         if limittime == '':
+            limittime = self.initiallimit(log)[1]
+            #limittime = float('inf')
+        elif limittime == 'inf':
             limittime = float('inf')
         else:
             limittime = int(limittime)
-        if tracelimit == '':
-            tracelimit = float('inf')
-        else:
-            tracelimit = int(tracelimit)
+
         if capacity == '':
+            capacity = self.initialtrace(log)[0]
+        elif capacity == 'inf':
             capacity = float('inf')
         else:
             capacity = int(capacity)
+
+        initiallimit0 = self.initiallimit(log)[0]
+        if activitylimit == '':
+            activitylimit1 = []
+            #print(activitylimit,'---------')
+            for activity in initiallimit0:
+                activitylimit1.append(activity[1])
+                #activitylimit1.append(float('inf'))
+        else:
+            #print(activitylimit,'~~~~~~~~')
+            activitylimit1 = []
+            #activitylimit = activitylimit.split(",")
+            for i,ele in enumerate(activitylimit):
+                if ele == '':
+                   activitylimit1.append(initiallimit0[i][1])
+                   #ctivitylimit1.append(float('inf'))
+
+                else:
+                   if ele == 'inf' or ele[1] == 'inf':
+                       activitylimit1.append(float('inf'))
+                   else:
+                       activitylimit1.append(int(ele[1]))
+
+
+        if tracelimit == '':
+            tracelimit = self.initialtrace(log)[1]
+        elif tracelimit == 'inf':
+            tracelimit = float('inf')
+        else:
+            tracelimit = int(tracelimit)
+
+        initialcapacity = self.computecapacity(log)
+
+        if activitiescapacity == '':
+            activitiescapacity1 = []
+            for x in initialcapacity:
+                activitiescapacity1.append(x[1])
+        else:
+            #activitiescapacity = activitiescapacity.split(",")
+            activitiescapacity1 = []
+            for i,ele in enumerate(activitiescapacity):
+                #print(ele,'~~~~~~~~~~~~~~~')
+                if ele == '':
+                   activitiescapacity1.append(initialcapacity[i][1])
+
+                else:
+                   if ele == 'inf':
+                       activitiescapacity1.append(float("inf"))
+                   else:
+                       activitiescapacity1.append(int(ele[1]))
+        '''
+
+
+        '''inf'''
+
+
+        if limittime == '':
+            #limittime = self.initiallimit(log)[1]
+            limittime = float('inf')
+        elif limittime == 'inf':
+            limittime = float('inf')
+        else:
+            limittime = int(limittime)
+
+        if capacity == '':
+            capacity = float('inf')
+        elif capacity == 'inf':
+            capacity = float('inf')
+        else:
+            capacity = int(capacity)
+
+        initiallimit0 = self.initiallimit(log)[0]
+        if activitylimit == '':
+            activitylimit1 = []
+            #print(activitylimit,'---------')
+            for activity in initiallimit0:
+                activitylimit1.append(float('inf'))
+                #activitylimit1.append(float('inf'))
+        else:
+            #print(activitylimit,'~~~~~~~~')
+            activitylimit1 = []
+            #activitylimit = activitylimit.split(",")
+            for i,ele in enumerate(activitylimit):
+                if ele == '':
+                   activitylimit1.append(initiallimit0[i][1])
+                   #ctivitylimit1.append(float('inf'))
+
+                else:
+                   if ele == 'inf' or ele[1] == 'inf':
+                       activitylimit1.append(float('inf'))
+                   else:
+                       activitylimit1.append(int(ele[1]))
+
+
+        if tracelimit == '':
+            tracelimit = float('inf')
+        elif tracelimit == 'inf':
+            tracelimit = float('inf')
+        else:
+            tracelimit = int(tracelimit)
+
+        initialcapacity = self.computecapacity(log)
+
+        if activitiescapacity == '':
+            activitiescapacity1 = []
+            for x in initialcapacity:
+                activitiescapacity1.append(float('inf'))
+        else:
+            #activitiescapacity = activitiescapacity.split(",")
+            activitiescapacity1 = []
+            for i,ele in enumerate(activitiescapacity):
+                #print(ele,'~~~~~~~~~~~~~~~')
+                if ele == '':
+                   activitiescapacity1.append(initialcapacity[i][1])
+
+                else:
+                   if ele == 'inf':
+                       activitiescapacity1.append(float("inf"))
+                   else:
+                       activitiescapacity1.append(int(ele[1]))
+
+        '''inf'''
+
+
         if businesshour == '':
             businesshour = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
             #businesshour = [12,13,14,15,16,17,18,19]
@@ -307,20 +458,7 @@ class recieve_and_convert_log:
 
         #@x1 = input('Do you want to set the capacity of each activity? [y/n]')
         #x1 = ''
-        if activitiescapacity == '':
-            activitiescapacity1 = []
-            for activity in activitiesList:
-                activitiescapacity1.append(float('inf'))
-        else:
-            #activitiescapacity = activitiescapacity.split(",")
-            activitiescapacity1 = []
-            for ele in activitiescapacity:
-                #print(ele,'~~~~~~~~~~~~~~~')
-                if ele == '':
-                   activitiescapacity1.append(float('inf'))
 
-                else:
-                   activitiescapacity1.append(int(ele))
         '''
         if activitylimit == '':
             activitylimit1 = []
@@ -338,21 +476,8 @@ class recieve_and_convert_log:
                 else:
                    activitylimit1.append(int(ele))
         '''
-        if activitylimit == '':
-            activitylimit1 = []
-            #print(activitylimit,'---------')
-            for activity in activitiesList:
-                activitylimit1.append(float('inf'))
-        else:
-            #print(activitylimit,'~~~~~~~~')
-            activitylimit1 = []
-            #activitylimit = activitylimit.split(",")
-            for ele in activitylimit:
-                if ele == '':
-                   activitylimit1.append(float('inf'))
 
-                else:
-                   activitylimit1.append(int(ele))
+
 
 
         '''for activity in activitiesList:
@@ -388,7 +513,7 @@ class recieve_and_convert_log:
           activitylimit.append(limit_number)'''
 
 
-
+        print(activitylimit1,"408")
 
         return (capacity,activitiescapacity1,businesshour,businessday,stop,activitylimit1,tracelimit,miss,limittime)
 
@@ -430,14 +555,21 @@ class recieve_and_convert_log:
 
 
         #print(tree.operator,tree,"infra line 405")
+        resourceornot = 0
         if converttree == 0:
             activitycount = {}
             for trace in Log:
                 for event in trace:
-                    if event[self.logid] in activitycount.keys():
-                        activitycount[event[self.logid]] += 1/len(Log)
+                    #print(event[self.logreso],'line 558')
+                    try:
+                       if event[self.logreso] == None or math.isnan(event[self.logreso]):
+                           resourceornot = 1
+                    except:
+                        a = 1
+                    if event[self.logname] in activitycount.keys():
+                        activitycount[event[self.logname]] += 1/len(Log)
                     else:
-                        activitycount[event[self.logid]] = 1/len(Log)
+                        activitycount[event[self.logname]] = 1/len(Log)
 
             loopdict = {}
             self.countrepeat(tree,loopdict,activitycount)
@@ -454,7 +586,19 @@ class recieve_and_convert_log:
             print("line 448")
 
 
-        simres = self.simulateresource(Log,log,self.logid,self.logreso)
+        if resourceornot == 0:
+
+           simres = self.simulateresource(Log,log,self.logname,self.logreso)
+        else:
+            print('here i am line 586')
+            simres = []
+            for trace in log:
+                restrace = []
+                for event in trace:
+                    restrace.append('uncertain resource')
+                simres.append(restrace)
+
+
 
         #print(log)
         #dataframe = log_converter.apply(log, variant=log_converter.Variants.TO_DATA_FRAME)
@@ -491,6 +635,7 @@ class recieve_and_convert_log:
         #csv_writer.writerow(["case:concept:name",self.logname,self.logtime])
 
         env = simpy.Environment()
+        #env1 = simpy.Environment()
         #process.setup(env,starttime,tracesList,duration,waitingtime,self.frequency_list,self.activity_deviation,info)
         #env.process(process.setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,self.frequency_list,self.activity_deviation,info))
         env.process(process.setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,arrivallist,deviation,info,arradeviainday,simres))
@@ -954,8 +1099,12 @@ class recieve_and_convert_log:
            notdo = []
            for child in tree.children:
                list = []
+               '''
                self.findlabel(child,list)
                notdo.append(list)
+               '''
+               if child.label != None:
+                  notdo.append(child.label)
            notdolist.append(notdo)
         for child in tree.children:
            self.notdoact(child,notdolist)
@@ -999,8 +1148,50 @@ class recieve_and_convert_log:
                                 actrescount[(trace[i][resattri],trace[j][resattri])] = 1
                             break
         for key,value in actrescount.items():
-            actrescount[key] = value/len(log)
-        return actrescount
+            actrescount[key] = round(value/len(log),2)
+        #print(actrescount,"line 1007")
+
+        keys = np.array(list(actrescount.keys()))
+        vals = np.array(list(actrescount.values()))
+        unq_keys, key_idx = np.unique(keys, return_inverse=True)
+
+        key_idx = key_idx.reshape(-1, 2)
+        #print(keys,vals,key_idx,unq_keys,"line1012")
+        n = len(unq_keys)
+        adj = np.zeros((n, n) ,dtype=vals.dtype)
+        adj[key_idx[:,0], key_idx[: ,1]] = vals
+        #print(adj,"line 1015")
+        adj1 = []
+
+        for i,y in enumerate(adj):
+            row = []
+            row.append(unq_keys[i])
+            for z in y:
+                row.append(z)
+            adj1.append(row)
+
+        return (actrescount,(adj1,unq_keys))
+
+
+    @classmethod
+    def initiallimit(self,log):
+        limitdict = {}
+        for trace in log:
+            for event in trace:
+                if event[self.logname] not in limitdict.keys():
+                    limitdict[event[self.logname]] = 1
+                else:
+                    limitdict[event[self.logname]] += 1
+        limitlist = []
+        for ele in Duration:
+            limitlist.append((ele[0],limitdict[ele[0]]))
+
+        fmt = '%Y-%m-%d %H:%M:%S'
+        interval = self.get_endtime(log)
+        cycletime = int((dt.datetime.strptime(interval[1],fmt)-dt.datetime.strptime(interval[0],fmt)).total_seconds())
+        return (limitlist,cycletime)
+
+
 
 
 
@@ -1008,7 +1199,7 @@ class recieve_and_convert_log:
     def simulateresource(self,originlog,log,logname,logres):
         list0 = []
         self.notdoact(self.process_tree,list0)
-        actrescount = self.getactivityresourcecount(originlog,list0,self.logid,self.logreso)
+        actrescount = self.getactivityresourcecount(originlog,list0,self.logname,self.logreso)[0]
         actcluster = roles_discovery.apply(originlog,variant=None, parameters={rpd.Parameters.RESOURCE_KEY:self.logreso})
         simreslog = []
         for trace in log:
@@ -1039,6 +1230,7 @@ class recieve_and_convert_log:
                     sample = []
                     ispre = False
                     i134 = -1
+                    i1188 = 0
                     while not ispre:
 
                         for ele1 in actrescount.keys():
@@ -1047,6 +1239,7 @@ class recieve_and_convert_log:
                                 dominator += actrescount[ele1]
                                 sample.append((ele1[1],actrescount[ele1]))
                                 ispre = True
+                                i1188 = 1
                             elif len(simrestrace)+i134 < 0:
                                 for ele0 in actcluster:
                                     if event[logname] in ele0[0]:
@@ -1072,7 +1265,7 @@ class recieve_and_convert_log:
 
                         i134 -= 1
                         #print(i134,"line 143")
-                    if sample != []:
+                    if sample != [] and dominator != 0:
                         chooselist = [('',0)]
                         pre = 0
                         for ele2 in sample:
@@ -1085,6 +1278,10 @@ class recieve_and_convert_log:
                             if chooselist[i][1] <= r and chooselist[i+1][1] >= r:
                                 simrestrace.append(chooselist[i+1][0])
                                 #print(event[logname],chooselist[i+1][0])
+
+                    elif i1188 == 1:
+                        simrestrace.append(list(executor)[random.randint(0,len(executor)-1)])
+
             simreslog.append(simrestrace)
         return simreslog
 
@@ -1179,6 +1376,8 @@ class recieve_and_convert_log:
         return retree
 
 
+
+
     @classmethod
     def countrepeat(self,tree,countloop,actnum):
 
@@ -1221,6 +1420,148 @@ class recieve_and_convert_log:
 
             if tree.label != None:
                 countloop[tree] = actnum[tree.label]
+
+    @classmethod
+    def computecapacity0(self,log):
+
+        eventlet.monkey_patch()
+        try:
+
+          with eventlet.Timeout(5,True):
+
+            #try:
+
+
+                capdict = {}
+                timedict = {}
+                for trace in log:
+                    for i in range(len(trace)-1):
+                        if trace[i][self.logname] not in timedict.keys():
+                            timedict[trace[i][self.logname]] = [(str(trace[i][self.logtime])[0:19],str(trace[i+1][self.logtime])[0:19])]
+                            #print("hi",trace[i][self.logname],timedict[trace[i][self.logname]])
+                        else:
+
+                            timedict[trace[i][self.logname]].append((str(trace[i][self.logtime])[0:19],str(trace[i+1][self.logtime])[0:19]))
+                            #print(trace[i][self.logname],timedict[trace[i][self.logname]],"line 1266")
+                #print(timedict,"timedict")
+                '''The part below takes too much time!!!'''
+                for key,value in timedict.items():
+
+                    for timetuple in value:
+                        count = 1
+
+                        for timetuple1 in value:
+                            eventlet.sleep(0)
+
+                            fmt = '%Y-%m-%d %H:%M:%S'
+                            if dt.datetime.strptime(timetuple[1],fmt) > dt.datetime.strptime(timetuple1[0],fmt) and \
+                            dt.datetime.strptime(timetuple1[0],fmt) > dt.datetime.strptime(timetuple[0],fmt):
+                                count += 1
+                                #print("1")
+                                #print(key,timetuple,timetuple1,count,"line 1279")
+                        if key not in capdict.keys() or capdict[key] < count:
+                           capdict[key] = count
+                capdict1 = []
+
+                for ele in Duration:
+                  if ele[0] not in capdict.keys():
+                      capdict1.append((ele[0],1))
+                  for key,value in capdict.items():
+                     if key == ele[0]:
+                        capdict1.append((key,value))
+        except eventlet.timeout.Timeout:
+                capdict1 = []
+
+                for ele in Duration:
+
+                      capdict1.append((ele[0],float("inf")))
+
+        #print(capdict,"line 1287")
+        return capdict1
+
+
+    @classmethod
+    def computecapacity(self,log):
+
+
+
+            #try:
+
+
+            capdict = {}
+            timedict = {}
+            for trace in log:
+                for i in range(len(trace)-1):
+                    if trace[i][self.logname] not in timedict.keys():
+                        fmt = '%Y-%m-%d %H:%M:%S'
+                        left = int(time.mktime(time.strptime(str(trace[i][self.logtime])[0:19],fmt)))
+                        right = int(time.mktime(time.strptime(str(trace[i+1][self.logtime])[0:19],fmt)))
+                        timedict[trace[i][self.logname]] = [(left,right)]
+                        #print("hi",trace[i][self.logname],timedict[trace[i][self.logname]])
+                    else:
+                        fmt = '%Y-%m-%d %H:%M:%S'
+                        left = int(time.mktime(time.strptime(str(trace[i][self.logtime])[0:19],fmt)))
+                        right = int(time.mktime(time.strptime(str(trace[i+1][self.logtime])[0:19],fmt)))
+
+
+                        timedict[trace[i][self.logname]].append((left,right))
+                        #print(trace[i][self.logname],timedict[trace[i][self.logname]],"line 1266")
+            #print(timedict,"timedict")
+            '''The part below takes too much time!!!
+            for key,value in timedict.items():
+
+                for timetuple in value:
+                    count = 1
+
+                    for timetuple1 in value:
+                        eventlet.sleep(0)
+
+                        fmt = '%Y-%m-%d %H:%M:%S'
+                        if dt.datetime.strptime(timetuple[1],fmt) > dt.datetime.strptime(timetuple1[0],fmt) and \
+                        dt.datetime.strptime(timetuple1[0],fmt) > dt.datetime.strptime(timetuple[0],fmt):
+                            count += 1
+                            #print("1")
+                            #print(key,timetuple,timetuple1,count,"line 1279")
+                    if key not in capdict.keys() or capdict[key] < count:
+                       capdict[key] = count
+            '''
+
+            for key,value in timedict.items():
+                 value.sort()
+                 #print(key,value,"line 1370")
+                 count = 1
+                 max = 1
+                 newinterval = (value[0][0],value[0][1])
+                 for i in range(len(value)-1):
+
+                     if value[i+1][0] >= newinterval[0] and value[i+1][0] < newinterval[1]:
+                         newinterval = (value[i+1][0],newinterval[1])
+                         count += 1
+                         #print(count,key,"line 1379")
+                     else:
+                         newinterval = value[i+1]
+                         count = 1
+                     if count > max:
+                         max = count
+                 capdict[key] = max
+            #print(capdict,"line 1383")
+
+            capdict1 = []
+
+            for ele in Duration:
+              if ele[0] not in capdict.keys():
+                  capdict1.append((ele[0],1))
+              for key,value in capdict.items():
+                 if key == ele[0]:
+                    capdict1.append((key,value))
+
+            return capdict1
+
+
+
+
+
+
 
 
 
@@ -1360,6 +1701,38 @@ class recieve_and_convert_log:
                 #evaluatetreelist[tree] = actdict[tree.label]/initialvalue
 
     @classmethod
+    def initialtrace(self,log):
+        num = len(log)
+        timelist = []
+        for i,trace in enumerate(log):
+            fmt = '%Y-%m-%d %H:%M:%S'
+            left = int(time.mktime(time.strptime(str(trace[0][self.logtime])[0:19],fmt)))
+            right = int(time.mktime(time.strptime(str(trace[-1][self.logtime])[0:19],fmt)))
+            timelist.append((left,right))
+
+        timelist.sort()
+        count = 1
+        max = 1
+        newinterval = (timelist[0][0],timelist[0][1])
+
+
+        #print(key,value,"line 1370")
+
+        for i in range(len(timelist)-1):
+
+             if timelist[i+1][0] >= newinterval[0] and timelist[i+1][0] < newinterval[1]:
+                 newinterval = (timelist[i+1][0],newinterval[1])
+                 count += 1
+                 #print(count,key,"line 1379")
+             else:
+                 newinterval = timelist[i+1]
+                 count = 1
+             if count > max:
+                 max = count
+        return (max,num)
+
+
+    @classmethod
     def resettreeprob(self,tree,maxlooplist,prob):
         prob1 = prob
         if tree.operator == pt_operator.Operator.LOOP:
@@ -1418,10 +1791,10 @@ class recieve_and_convert_log:
         activitycount = {}
         for trace in Log:
             for event in trace:
-                if event[self.logid] in activitycount.keys():
-                    activitycount[event[self.logid]] += 1/len(Log)
+                if event[self.logname] in activitycount.keys():
+                    activitycount[event[self.logname]] += 1/len(Log)
                 else:
-                    activitycount[event[self.logid]] = 1/len(Log)
+                    activitycount[event[self.logname]] = 1/len(Log)
         tree = inductive_miner.apply_tree(Log)
 
         loopdict = {}
@@ -1443,18 +1816,19 @@ class recieve_and_convert_log:
                   loopdict1[key] = round(loopdict[key],8)
 
 
-
+        evaluatetreelist1 = {}
         for key in evaluatetreelist.keys():
-            if key.operator == None and key.label == None:
-                evaluatetreelist[key] = 0.1
-            else:
+            #if key.operator == None and key.label == None:
+                #evaluatetreelist1[key] = 0.1
+            if not key.parent is None:
+              if key.parent.operator == pt_operator.Operator.XOR:
                 if round(evaluatetreelist[key],2) != 0.0:
-                   evaluatetreelist[key] = round(evaluatetreelist[key],2)
+                   evaluatetreelist1[key] = round(evaluatetreelist[key],2)
                 else:
-                   evaluatetreelist[key] = round(evaluatetreelist[key],5)
+                   evaluatetreelist1[key] = round(evaluatetreelist[key],5)
 
 
-        return (evaluatetreelist,loopdict1)
+        return (evaluatetreelist1,loopdict1)
 
 
 

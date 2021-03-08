@@ -30,12 +30,31 @@ TRACECOUNTER = 0
 CASEINTERRUPT = 0
 LASTDAY = None
 LASTL = 0
+Processcount = []
 
 class Process(object):
 
-    def __init__(self, env,num_traces,waitingtime):
+    def __init__(self, env,num_capacity,waitingtime):
         self.env = env
-        self.processor = simpy.Resource(env,num_traces)
+        self.processor = simpy.Resource(env,num_capacity)
+        self.waiting = waitingtime
+        self.number = 0
+
+
+
+
+    def process(self, executor, time):
+        global NUMBER
+        global LASTL
+        LASTL = self.env.now
+        yield self.env.timeout(time)
+
+class Event(object):
+
+    def __init__(self, env,num_capacity,waitingtime):
+        self.env = env
+        self.event = simpy.Resource(env,num_capacity)
+        self.capacity = num_capacity
         self.waiting = waitingtime
         self.number = 0
 
@@ -51,15 +70,17 @@ class Process(object):
 
 
 
-def executor(env,starttime,name, ps, order, time, index,resource):
+def executor(env,csv_writer,starttime,name, ps, order, time, index,resource):
 
 
-    #with ps.processor.request() as request:
-        #yield request
+    with ps.event.request() as request:
+        #print(ps.capacity,"line 76")
+        yield request
         global COUNTER
         global FINISHEDTIME
         global OUTPUT
         timestring = convert_timestamp(env.now,starttime)
+        csv_writer.writerow([name[2:],order,resource,timestring,"COMPLETE"])
         OUTPUT.append('%s starts %s at %s by %s' % (name, order,
         timestring,resource))
         FINISHEDTIME = convert_timestamp(env.now,starttime)
@@ -146,7 +167,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
     #OUTPUT.append(NUMBER)
     if NUMBER > info[0]:
         CASEWAIT += 1
-        OUTPUT.append("Sorry the capacity is full at %s, ID%d must wait" % (time,(i+startID)))
+        OUTPUT.append("Sorry the capacity of trace is full at %s, ID%d must wait" % (time,(i+startID)))
 
     with process.processor.request() as request:
           yield request
@@ -170,6 +191,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                min = int(time[14:16])
                sec = int(time[17:19])
                jump = 0
+               jumpexecution = 0
                skiptrace = 0
                casewait = 0
                #OUTPUT.append(COUNTER,'...')
@@ -197,6 +219,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                if info[4] == 'y':
                 repeat = 0
                 while True:
+
                  if inlist(day,info[3]) == False :
                    #OUTPUT.append(hour,'.............')
                    time = convert_timestamp(env.now,starttime)
@@ -255,14 +278,35 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
 
                for k,val in enumerate(duration):
                  if tracesList[i][j] == val[0]:
+                   #print(COUNTER[k],info[5][k],i,val[0],info[4],'line 280')
                    if COUNTER[k] >= info[5][k]:
-                       OUTPUT.append('Sorry ID%d, the limit of %s is reached temporarily '%((i+startID),val[0]))
-                       csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"INTERRUPT"])
-                       FINISHEDTIME = convert_timestamp(env.now,starttime)
-                       jump = 1
-                       INTERRUPT[k] += 1
-                       break
+                       if info[4] == 'n':
+                           OUTPUT.append('Sorry ID%d, the limit of %s is reached temporarily, this event will be skipped'%((i+startID),val[0]))
+                           csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"INTERRUPT"])
+                           print(i,val[0],time,'line 286')
+                           FINISHEDTIME = convert_timestamp(env.now,starttime)
+                           jump = 1
+                           INTERRUPT[k] += 1
+                           break
+                       else:
+                           flag288 = 0
+                           while COUNTER[k] >= info[5][k]:
+                               if flag288 == 0:
+                                   time = convert_timestamp(env.now,starttime)
+                                   OUTPUT.append('Sorry ID%d, the limit of %s is reached temporarily, this event will be suspended'%((i+startID),val[0]))
+                                   csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"SUSPEND"])
+                                   print(i,val[0],time,'line 298')
+                                   WAITING[k] += 1
+                                   flag288 = 1
+                               nextsuptime = info[8]-(env.now%info[8])
+
+                               yield env.timeout(nextsuptime)
+                               refreshcounter(env.now,starttime,info[8])
+
+                           jumpexecution = 1
+
                if jump == 1:
+                   print('line 306')
                    continue
                if skiptrace == 1:
                    break
@@ -270,27 +314,39 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                    #OUTPUT.append(info[2],hour)
                    #break
 
+
                for k,val in enumerate(duration):
 
                  if tracesList[i][j] == val[0]:
                   #OUTPUT.append(processcount[k],info[1][k])
-                  if processcount[k]>=info[1][k]:
+                  '''
+                  if jumpexecution == 1:
+                      while COUNTER[k] >= info[5][k]:
+                          time = convert_timestamp(env.now,starttime)
+                          OUTPUT.append('Sorry ID%d, the limit of %s is reached temporarily, this event will be suspended'%((i+startID),val[0]))
+                          csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"SUSPEND"])
+                          WAITING[k] += 1
+                          nextsuptime = info[8]-(env.now%info[8])
+                          yield env.timeout(nextsuptime)
+                  '''
+
+                  if Processcount[k]>=info[1][k]:
+
                       time = convert_timestamp(env.now,starttime)
                       WAITING[k] += 1
                       OUTPUT.append('Sorry, ID%d has to wait for %s at %s' % ((i+startID),val[0],time))
                       csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"SUSPEND"])
-                  elif inlist(day,info[3]) == True and inlist(hour,info[2]) == True:
+                  if inlist(day,info[3]) == True and inlist(hour,info[2]) == True:
                     #print(day,hour,time,info[2],"line 281")
-                    with processlist[k].processor.request() as request:
-                       yield request
+
                        #OUTPUT.append(str(processlist[k]),'....')
-                       processcount[k] += 1
+                       Processcount[k] += 1
 
                        name = i+startID
                        #time2 = time1.strftime("%Y-%m-%d %H:%M:%S", time1.localtime
                                  #((365*51*24*60*60+13*24*60*60-60*60) + env.now))
                        time2 = convert_timestamp(env.now,starttime)
-                       csv_writer.writerow([(i+startID),val[0],simres[i][j],time2,"COMPLETE"])
+                       #csv_writer.writerow([(i+startID),val[0],simres[i][j],time2,"COMPLETE"])
                        #OUTPUT.append(duration,'.....')
                        #OUTPUT.append(deviationlist,'.....')
                        '''
@@ -300,16 +356,21 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                            leftedge = 0
                        time = random.randint(leftedge,rightedge)
                        '''
-                       time1list = np.random.normal(val[1],deviationlist[k][1],10)
+                       time1list = np.random.normal(val[1],0.1*deviationlist[k][1],10)
+                       #time1list = np.random.normal(val[1],deviationlist[k][1],10)
                        time1 = time1list[random.randint(0,9)]
+
                        #print(time1list,'time1list of' ,val[0])
                        if time1 < 0.0:
                            time1 = 0
+                       #print(name,val[0],val[1],time1,"line 305")
 
 
-                       yield env.process(executor(env,starttime, 'ID%d' % name,process,val[0],time1,k,simres[i][j]))
+                       yield env.process(executor(env,csv_writer,starttime,'ID%d' % name,processlist[k],val[0],time1,k,simres[i][j]))
+                       #print(name,starttime,val[0],'line 363')
                        EXECUTION[k] += 1
-                       processcount[k] -= 1
+                       Processcount[k] -= 1
+                       break
 
           NUMBER -= 1
 
@@ -317,17 +378,24 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
 
 
 def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequencylist,deviationlist,info,arradeviainday,simres):
+    global Processcount
     process = Process(env,info[0],waitingtime)
     processlist = []
     processcount = []
     print(info)
     i_poisson = 0
+    print(info[5],'line 377')
 
     for j,ele in enumerate(duration):
-        locals()[str(ele[0])] = Process(env,info[1][j],waitingtime)
+        '''
+        locals()[str(ele[0])] = Process(env,info[1][j],ele[1])
         processcount.append(0)
         processlist.append(locals()[str(ele[0])])
-
+        '''
+        #env = simpy.Environment()
+        processcount.append(0)
+        processlist.append(Event(env,info[1][j],ele[1]))
+    Processcount = processcount
     i = 0
     #f = open('simulationresult.csv','w',encoding='utf-8')
     #csv_writer = csv.writer(f)
@@ -353,7 +421,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
     global OUTPUT
     #global TRACEINTERRUPT
     #global TRACEWAITING
-    waitingtime = stats.poisson.rvs(mu=waitingtime, size=len(tracesList), random_state=3)
+    waitingtime1 = stats.poisson.rvs(mu=waitingtime, size=len(tracesList), random_state=3)
 
     #print(tracetime)
 
@@ -408,7 +476,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
             OUTPUT.append('Unfortunately, the limit of trace is reached, ID%s will be missed'%(i+startID))
             #yield env.timeout(frequencylist[hour])
 
-            tracetime = waitingtime[i_poisson]
+            tracetime = waitingtime1[i_poisson]
             i_poisson += 1
             if tracetime < 0.0:
                 tracetime = 0
@@ -488,7 +556,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
                nextday = 24*3600 - ((env.now+(hour1*3600)+(min1*60)+sec1))%(24*3600)
                LASTL = env.now
 
-               tracetime = waitingtime[i_poisson]
+               tracetime = waitingtime1[i_poisson]
                i_poisson += 1
                if tracetime < 0.0:
                    tracetime = 0
@@ -523,7 +591,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
               #OUTPUT.append(day,hour,min,sec,env.now,nexthour,'........')
               LASTL = env.now
 
-              tracetime = waitingtime[i_poisson]
+              tracetime = waitingtime1[i_poisson]
               i_poisson += 1
               if tracetime < 0.0:
                   tracetime = 0
@@ -552,7 +620,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
 
 
             #OUTPUT.append(waitingtime)
-            env.process(simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,processcount,simres))
+            env.process(simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,Processcount,simres))
 
             #tracetime = arradeviainday
             '''
@@ -577,7 +645,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
             if tracetime < 0.0:
                 tracetime = 0
             '''
-
+            #tracetime = waitingtime
             yield env.timeout(tracetime)
             repeat = 0
                #NUMBER += 1
@@ -629,7 +697,7 @@ def refreshcounter(time,starttime,limittime):
         LASTDAY = day
         '''
     if int(LASTL/limittime) < int(time/limittime):
-        OUTPUT.append('A new supply cycle comes at %s, all the counter of limit will be cleared'%(time1))
+        #OUTPUT.append('A new supply cycle comes at %s, all the counter of limit will be cleared'%(time1))
         COUNTER = [0 for ele in COUNTER]
         TRACECOUNTER = 0
 

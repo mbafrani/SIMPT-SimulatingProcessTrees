@@ -18,6 +18,9 @@
           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Capacity</a></span>
         </div>
         <input type="text" style="background-color:transparent;  " size="130" name="trca1" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+        <div class="input-group-append">
+        <span class="input-group-text" style="background-color:transparent"><a style=" ">{{capacity}}</a></span>
+      </div>
       </div>
 
 
@@ -28,6 +31,9 @@
           <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit</a></span>
         </div>
         <input type="text" style="background-color:transparent;  " size="130" name="trli1" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+        <div class="input-group-append">
+        <span class="input-group-text" style="background-color:transparent"><a style=" ">{{limit}}</a></span>
+      </div>
       </div>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -50,29 +56,31 @@
 
        {% csrf_token %}
 
-        {% for x in activitylist %}
+        {% for x in initialcapacity %}
         <div class="input-group mb-3">
 
           <div class="input-group-prepend">
 
-            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Capacity of {{x}}</a></span>
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Capacity of {{x.0}}</a></span>
           </div>
 
-          <input type="text" style="background-color:transparent;  " size="130" name="{{x}}c" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
-
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x.0}}c" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+          <div class="input-group-append">
+          <span class="input-group-text" style="background-color:transparent"><a style=" ">{{x.1}}</a></span>
+        </div>
         </div>
         {% endfor %}
 
         <h5 style=" margin-left:0px" >Limit:</h5>
 
-        {% for x in activitylist %}
+        {% for x in initiallimit %}
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit of {{x}}</a></span>
+            <span class="input-group-text" style="background-color:transparent" id="basic-addon7"><a style=" ">Limit of {{x.0}}</a></span>
           </div>
-          <input type="text" style="background-color:transparent;  " size="130" name="{{x}}l" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
+          <input type="text" style="background-color:transparent;  " size="130" name="{{x.0}}l" class="form-control" placeholder="Please enter integer or 'inf' as infinity" aria-describedby="basic-addon7">
           <div class="input-group-append">
-
+          <span class="input-group-text" style="background-color:transparent"><a style=" ">{{x.1}}</a></span>
         </div>
         </div>
         {% endfor %}

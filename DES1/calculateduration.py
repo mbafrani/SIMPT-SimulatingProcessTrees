@@ -8,7 +8,7 @@ import datetime as dt
 #log = importer.apply(os.path.join(adr))
 
 def getaverageduration(log,logname,logtime,logtransi):
-     activities = attributes_filter.get_attribute_values(log,logtime)
+     activities = attributes_filter.get_attribute_values(log,logname)
      time = attributes_filter.get_attribute_values(log,logtime)
      variants = variants_filter.get_variants(log)
      #print('\n',activities,'\n')
@@ -54,19 +54,21 @@ def getaverageduration(log,logname,logtime,logtransi):
          count = 0
          for j in range(len(transitionList)):
 
-             if transitionList[j] == "START" and variantsList[j] == val:
+             if transitionList[j] == "START" or transitionList[j] == "start" and variantsList[j] == val:
                  k = j+1
                  while True:
-                     if transitionList[k] == "COMPLETE" and variantsList[k] == val:
+                     if transitionList[k] == "COMPLETE" or transitionList[k] == "complete" and variantsList[k] == val:
                         end = timeList[k][0:19]
                         start = timeList[j][0:19]
                         duration = dt.datetime.strptime(end,fmt)-dt.datetime.strptime(start,fmt)
                         count += 1
                         timeSum += int(duration.total_seconds())
+                        print(duration,timeSum,'line 66')
                         indexlist.append(k)
                         break
                      k += 1
          durationlist1.append((timeSum,count))
+         print(durationlist1,'line 70')
      #print(indexlist)
 
      if 2000 in indexlist:
@@ -80,7 +82,7 @@ def getaverageduration(log,logname,logtime,logtransi):
         for j in range(len(variantsList1)):
            for h in range(len(variantsList1[j])-1):
               jump = 0
-              if transitionList[header+h] == "COMPLETE" and variantsList1[j][h] == val:
+              if transitionList[header+h] == "COMPLETE" or transitionList[header+h] == "complete" and variantsList1[j][h] == val:
 
                 #for k in range(len(indexlist)):
                     #x = h + header
@@ -104,6 +106,7 @@ def getaverageduration(log,logname,logtime,logtransi):
                     timeSum += int(duration.total_seconds())
            header += len(variantsList1[j])
         durationlist2.append((timeSum,count))
+        print(durationlist2,'line 108')
 
      for i,val in enumerate(durationlist1):
         duration = val[0] + durationlist2[i][0]
@@ -114,7 +117,7 @@ def getaverageduration(log,logname,logtime,logtransi):
         else:
             averageduration = duration/count
             result.append(averageduration)
-     #print(result)
+     print(result,"line 117")
      return result
 
 
@@ -232,6 +235,8 @@ def getaverageduration2(log,logname,logtime):
          else:
              duration.append(timeSum/count)
 
+         print(duration,'line 235')
+
 
      #print('Here is our list of average duration:','\n',duration,'\n')
 
@@ -246,7 +251,7 @@ def getaverageduration3(log,logname,logtime,logstti,logcoti):
     #print('\n',activities,'\n')
     #print('\n',time)
     #print('\n',variants)
-    timeList=[]
+    timedict={}
     activities = attributes_filter.get_attribute_values(log, logname)
     fmt = '%Y-%m-%d %H:%M:%S'
     '''
@@ -262,19 +267,16 @@ def getaverageduration3(log,logname,logtime,logstti,logcoti):
            end = event[logcoti][0:19]
            start = event[logstti][0:19]
            ts = dt.datetime.strptime(end,fmt)-dt.datetime.strptime(start,fmt)
-           timeList.append((event[logname],int(ts.total_seconds())))
+           #timeList.append((event[logname],int(ts.total_seconds())))
+           if not event[logname] in timedict.keys():
+              timedict[event[logname]] = (int(ts.total_seconds()),1)
+           else:
+              timedict[event[logname]] = (timedict[event[logname]][0]+int(ts.total_seconds()), timedict[event[logname]][1]+1)
         #print (trace,'\n')
+    for key in timedict.keys():
+        timedict[key] = timedict[key][0]/timedict[key][1]
     for ele in activities:
-        value = 0
-        count = 0
-        for ele1 in timeList:
-            if ele1[0] == ele:
-                value += ele1[1]
-                count += 1
-        if count == 0:
-            duration.append(0)
-        else:
-            duration.append(value/count)
+        duration.append(timedict[ele])
 
 
     return duration

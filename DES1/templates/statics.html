@@ -39,6 +39,31 @@
                     <li><h4 style="margin-top:20px">Process tree:</h4></li>
                     <h5> {{ ptree }}</h5>
 
+                   <li><h4 style="margin-top:20px">The initial capacity and limit of trace are: </h4></li>
+                   <h5> {{initialtrace.0}} and {{initialtrace.1}}</h5>
+
+                    <li><h4 style="margin-top:20px">The initial capacity and limit of each activity:</h4></li>
+                    <table border="1.5" cellpadding="10">
+                      <thead align="center">
+                        <tr>
+                          <th>Activity</th>
+                          <th>Capactiy</th>
+                          <th>Limit</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for x in initialcaplim %}
+                          <tr>
+                                <td width="200" align="center">{{x.0}}</td>
+                                <td align="center">{{x.1}}</td>
+                                <td align="center">{{x.2}}</td>
+
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+
                     <li><h4 style="margin-top:20px">Mean duration and deviation of each activity:</h4></li>
                     <table border="1.5" cellpadding="10">
                       <thead align="center">
@@ -54,6 +79,29 @@
                                 <td width="200" align="center">{{x.0}}</td>
                                 <td align="center">{{x.1}}</td>
                                 <td align="center">{{x.2}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+
+                    <li><h4 style="margin-top:20px">The handover Matrix:</h4></li>
+                    <table border="1.5"  cellpadding="4">
+                      <thead align="center">
+
+                        <tr>
+                          <th></th>
+                          {% for x in handover.1 %}
+                          <th>{{x}}</th>
+                          {% endfor %}
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for x in handover.0 %}
+                          <tr>
+
+                                {% for y in x %}
+                                <td align="center">{{y}}</td>
+                                {% endfor %}
                           </tr>
                           {% endfor %}
                       </tbody>

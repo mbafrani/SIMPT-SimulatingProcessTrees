@@ -121,3 +121,8 @@ In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation proces
 *   ##### Don't forget to click "Save" in the end.
 
 *   ##### The blank entry at the input group will be considered as default.
+
+### Contributer 
+
+- Shuai Jiao
+- Mahsa Pourbafrani

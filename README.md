@@ -122,7 +122,7 @@ In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation proces
 
 *   ##### The blank entry at the input group will be considered as default.
 
-### Contributer 
+### Contributors
 
 - Shuai Jiao
 - Mahsa Pourbafrani

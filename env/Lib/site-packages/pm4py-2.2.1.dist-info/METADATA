@@ -1,0 +1,64 @@
+Metadata-Version: 2.1
+Name: pm4py
+Version: 2.2.1
+Summary: Process Mining for Python (PM4Py)
+Home-page: http://www.pm4py.org
+Author: Fraunhofer Institute for Applied Technology
+Author-email: pm4py@fit.fraunhofer.de
+License: GPL 3.0
+Project-URL: Documentation, http://www.pm4py.org
+Project-URL: Source, https://github.com/pm4py/pm4py-source
+Project-URL: Tracker, https://github.com/pm4py/pm4py-source/issues
+Platform: UNKNOWN
+Requires-Dist: deprecation
+Requires-Dist: graphviz
+Requires-Dist: intervaltree
+Requires-Dist: jsonpickle
+Requires-Dist: lxml
+Requires-Dist: matplotlib
+Requires-Dist: networkx
+Requires-Dist: numpy (!=1.19.4)
+Requires-Dist: pandas
+Requires-Dist: pulp (<=2.1)
+Requires-Dist: pydotplus
+Requires-Dist: pytz
+Requires-Dist: pyvis
+Requires-Dist: scikit-learn
+Requires-Dist: scipy
+Requires-Dist: stringdist
+Requires-Dist: sympy
+Requires-Dist: tqdm
+Requires-Dist: ciso8601 ; python_version < "3.7"
+Requires-Dist: cvxopt ; python_version < "3.9"
+
+# PM4Py
+PM4Py is a python library that supports (state-of-the-art) process mining algorithms in python. 
+It is completely open source and intended to be used in both academia and industry projects.
+PM4Py is a product of the Fraunhofer Institute for Applied Information Technology.
+
+## Documentation / API
+Full documentation of PM4Py is available at http://pm4py.org/
+
+## First Example
+A very simple example, to whet your appetite:
+
+import pm4py
+
+log = pm4py.read_xes('<path-to-xes-log-file.xes>')
+
+process_model, initial_marking, final_marking = pm4py.discover_petri_net_inductive(log)
+
+pm4py.view_petri_net(process_model, initial_marking, final_marking, format="svg")
+
+## Installation
+PM4Py can be installed on Python 3.6.x / 3.7.x / 3.8.x by doing:
+pip install -U pm4py
+
+## Release Notes
+To track the incremental updates, we offer a [*RELEASE_NOTES*](https://github.com/pm4py/pm4py-core/blob/release/RELEASE_NOTES) file.
+
+## Third Party Dependencies
+As scientific library in the Python ecosystem, we rely on external libraries to offer our features.
+Please check the [*README.THIRD_PARTY.md*](https://github.com/pm4py/pm4py-core/blob/release/README.THIRD_PARTY.md) file in order to know the dependencies and their license.
+
+

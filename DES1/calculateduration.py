@@ -7,7 +7,7 @@ import datetime as dt
 #adr = input("Please give the path of event data：")
 #log = importer.apply(os.path.join(adr))
 
-def getaverageduration(log,logname,logtime,logtransi):
+def getaverageduration(log,logname,logtime,logtransi,logid):
      activities = attributes_filter.get_attribute_values(log,logname)
      time = attributes_filter.get_attribute_values(log,logtime)
      variants = variants_filter.get_variants(log)
@@ -19,6 +19,7 @@ def getaverageduration(log,logname,logtime,logtransi):
      variantsList1=[]
      transitionList=[]
      activitieslist=[]
+     eventidlist = []
      for trace in activities:
          activitieslist.append(trace)
      for trace in log:
@@ -28,6 +29,7 @@ def getaverageduration(log,logname,logtime,logtransi):
      for trace in log:
         for event in trace:
             transitionList.append(event[logtransi])
+            eventidlist.append(event[logid])
      for trace in log:
          sublist=[]
          for event in trace:
@@ -57,7 +59,7 @@ def getaverageduration(log,logname,logtime,logtransi):
              if transitionList[j] == "START" or transitionList[j] == "start" and variantsList[j] == val:
                  k = j+1
                  while True:
-                     if transitionList[k] == "COMPLETE" or transitionList[k] == "complete" and variantsList[k] == val:
+                     if (transitionList[k] == "COMPLETE" or transitionList[k] == "complete") and eventidlist[k] == eventidlist[j]:
                         end = timeList[k][0:19]
                         start = timeList[j][0:19]
                         duration = dt.datetime.strptime(end,fmt)-dt.datetime.strptime(start,fmt)
@@ -235,7 +237,7 @@ def getaverageduration2(log,logname,logtime):
          else:
              duration.append(timeSum/count)
 
-         print(duration,'line 235')
+         #print(duration,'line 235')
 
 
      #print('Here is our list of average duration:','\n',duration,'\n')
@@ -252,6 +254,7 @@ def getaverageduration3(log,logname,logtime,logstti,logcoti):
     #print('\n',time)
     #print('\n',variants)
     timedict={}
+    durationdict = {}
     activities = attributes_filter.get_attribute_values(log, logname)
     fmt = '%Y-%m-%d %H:%M:%S'
     '''
@@ -264,10 +267,14 @@ def getaverageduration3(log,logname,logtime,logstti,logcoti):
     duration = []
     for trace in log:
         for event in trace:
-           end = event[logcoti][0:19]
-           start = event[logstti][0:19]
+           end = str(event[logcoti])[0:19]
+           start = str(event[logstti])[0:19]
            ts = dt.datetime.strptime(end,fmt)-dt.datetime.strptime(start,fmt)
            #timeList.append((event[logname],int(ts.total_seconds())))
+           if not event[logname] in durationdict.keys():
+              durationdict[event[logname]] = [int(ts.total_seconds())]
+           else:
+               durationdict[event[logname]].append(int(ts.total_seconds()))
            if not event[logname] in timedict.keys():
               timedict[event[logname]] = (int(ts.total_seconds()),1)
            else:
@@ -277,6 +284,16 @@ def getaverageduration3(log,logname,logtime,logstti,logcoti):
         timedict[key] = timedict[key][0]/timedict[key][1]
     for ele in activities:
         duration.append(timedict[ele])
+    deviationlist = []
+    for key in durationdict.keys():
+        literal = 0
+
+        for ele in durationdict[key]:
+
+            literal += pow(timedict[key]-ele,2)
+        deviation = pow((literal/len(durationdict[key])),1/2)
+        deviationlist.append((key,deviation))
+
 
 
     return duration

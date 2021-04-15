@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: pyvis
+Version: 0.1.9
+Summary: A Python network visualization library
+Home-page: https://github.com/WestHealth/pyvis
+Author: Giancarlo Perrone
+Author-email: gperrone@westhealth.org
+License: BSD
+Platform: UNKNOWN
+Requires-Dist: jinja2 (>=2.9.6)
+Requires-Dist: networkx (>=1.11)
+Requires-Dist: ipython (>=5.3.0)
+Requires-Dist: jsonpickle (>=1.4.1)
+
+UNKNOWN
+
+

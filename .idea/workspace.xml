@@ -2,8 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df39bd70-769d-4c20-b32a-584b18ff09b1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/_semantics.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/_semantics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/calculateduration.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/calculateduration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/infrastructure.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/infrastructure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/process.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/process.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/static/image1.gv.png" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/static/image1.gv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/static/image2.gv.png" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/static/image2.gv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/static/image3.gv.png" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/static/image3.gv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/static/ptree.gv.png" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/static/ptree.gv.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/templates/basefinal.html" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/templates/basefinal.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/templates/info.html" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/templates/info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/templates/statics.html" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/templates/statics.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/test3.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/test3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/testfile/result3.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/testfile/result3.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/tests.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DES1/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DES1/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/log/input_log.csv" beforeDir="false" afterPath="$PROJECT_DIR$/media/log/input_log.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/log/input_log.xes" beforeDir="false" afterPath="$PROJECT_DIR$/media/log/input_log.xes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulationresult.csv" beforeDir="false" afterPath="$PROJECT_DIR$/simulationresult.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +119,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../PycharmProjects" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />

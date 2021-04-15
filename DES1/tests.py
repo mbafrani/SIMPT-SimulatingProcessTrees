@@ -15,7 +15,7 @@ from pm4py.objects.log.util import dataframe_utils
 from pm4py.objects.conversion.log import converter as log_converter
 from pm4py.objects.log.exporter.xes import exporter as xes_exporter
 '''
-log = importer.apply('/Users/jiao.shuai.1998.12.01outlook.com/code/07.01.2021/DES1/restaurant.xes')
+log = importer.apply()
 #ptree = [->('enter','leave')]
 tree = inductive_miner.apply_tree(log)
 #print('\n','The corresponding process tree is shown as follow:','\n',ptree,'\n')

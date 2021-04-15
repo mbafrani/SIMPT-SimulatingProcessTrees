@@ -90,7 +90,7 @@ def executor(env,csv_writer,starttime,name, ps, order, time, index,resource):
 
 
 
-def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,processcount,simres):
+def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,processcount,simres,actwaitdict):
     global NUMBER
     global FLAG
     global EXECUTION
@@ -295,7 +295,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                                    time = convert_timestamp(env.now,starttime)
                                    OUTPUT.append('Sorry ID%d, the limit of %s is reached temporarily, this event will be suspended'%((i+startID),val[0]))
                                    csv_writer.writerow([(i+startID),val[0],simres[i][j],time,"SUSPEND"])
-                                   print(i,val[0],time,'line 298')
+                                   #print(i,val[0],time,'line 298')
                                    WAITING[k] += 1
                                    flag288 = 1
                                nextsuptime = info[8]-(env.now%info[8])
@@ -357,8 +357,14 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                        time = random.randint(leftedge,rightedge)
                        '''
                        time1list = np.random.normal(val[1],0.1*deviationlist[k][1],10)
+                       if name in actwaitdict.keys():
+                          waittimelist = np.random.normal(actwaitdict[name],0.1*actwaitdict[name],10)
+                          waittime = waittimelist[random.randint(0,9)]
+                       else:
+                          waittime = 0
                        #time1list = np.random.normal(val[1],deviationlist[k][1],10)
                        time1 = time1list[random.randint(0,9)]
+
 
                        #print(time1list,'time1list of' ,val[0])
                        if time1 < 0.0:
@@ -366,7 +372,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
                        #print(name,val[0],val[1],time1,"line 305")
 
 
-                       yield env.process(executor(env,csv_writer,starttime,'ID%d' % name,processlist[k],val[0],time1,k,simres[i][j]))
+                       yield env.process(executor(env,csv_writer,starttime,'ID%d' % name,processlist[k],val[0],time1+waittime,k,simres[i][j]))
                        #print(name,starttime,val[0],'line 363')
                        EXECUTION[k] += 1
                        Processcount[k] -= 1
@@ -377,7 +383,7 @@ def simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duratio
 
 
 
-def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequencylist,deviationlist,info,arradeviainday,simres):
+def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequencylist,deviationlist,info,arradeviainday,simres,actwaitdict):
     global Processcount
     process = Process(env,info[0],waitingtime)
     processlist = []
@@ -620,7 +626,7 @@ def setup(env,csv_writer,startID,starttime,tracesList,duration,waitingtime,frequ
 
 
             #OUTPUT.append(waitingtime)
-            env.process(simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,Processcount,simres))
+            env.process(simulate_trace(env,process,startID,starttime,csv_writer,i,tracesList,duration,deviationlist,info,processlist,Processcount,simres,actwaitdict))
 
             #tracetime = arradeviainday
             '''

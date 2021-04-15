@@ -1,73 +1,60 @@
 case:concept:name,concept:name,org:resource,time:timestamp,lifecycle:transition
-0,register request,Pete,2021-01-01 01:00:00,COMPLETE
-0,check ticket,Mike,2021-01-01 22:15:22,COMPLETE
-0,examine casually,Ellen,2021-01-01 22:15:22,COMPLETE
-0,decide,Sara,2021-01-01 22:15:22,COMPLETE
-0,reinitiate request,Sara,2021-01-02 02:51:53,COMPLETE
-1,register request,Pete,2021-01-02 11:25:40,COMPLETE
-0,examine thoroughly,Sean,2021-01-02 14:14:49,COMPLETE
-1,check ticket,Mike,2021-01-03 21:08:31,COMPLETE
-2,register request,Ellen,2021-01-03 21:42:24,COMPLETE
-2,check ticket,Mike,2021-01-04 18:42:34,COMPLETE
-3,register request,Mike,2021-01-05 08:23:29,COMPLETE
-0,check ticket,Ellen,2021-01-05 08:43:54,COMPLETE
-3,examine thoroughly,Sean,2021-01-05 17:23:34,COMPLETE
-0,decide,Sara,2021-01-06 15:36:15,COMPLETE
-2,examine casually,Mike,2021-01-06 17:38:30,COMPLETE
-4,register request,Mike,2021-01-06 18:31:59,COMPLETE
-4,examine casually,Mike,2021-01-06 18:31:59,COMPLETE
-1,examine thoroughly,Sue,2021-01-07 07:25:34,COMPLETE
-2,decide,Sara,2021-01-07 08:21:36,COMPLETE
-3,check ticket,Ellen,2021-01-07 18:38:58,COMPLETE
-1,decide,Sara,2021-01-07 21:53:37,COMPLETE
-1,reject request,Mike,2021-01-07 21:53:37,COMPLETE
-5,register request,Pete,2021-01-08 04:29:52,COMPLETE
-5,examine casually,Mike,2021-01-08 17:21:19,COMPLETE
-6,register request,Mike,2021-01-09 14:58:56,COMPLETE
-6,examine casually,Ellen,2021-01-10 15:50:09,COMPLETE
-7,register request,Ellen,2021-01-11 01:28:58,COMPLETE
-4,check ticket,Ellen,2021-01-11 08:16:58,COMPLETE
-0,pay compensation,Ellen,2021-01-11 12:49:50,COMPLETE
-7,check ticket,Mike,2021-01-11 15:49:37,COMPLETE
-2,reject request,Pete,2021-01-11 15:53:57,COMPLETE
-6,check ticket,Mike,2021-01-11 19:36:10,COMPLETE
-3,decide,Sara,2021-01-11 23:26:10,COMPLETE
-8,register request,Mike,2021-01-12 11:44:27,COMPLETE
-3,reinitiate request,Sara,2021-01-12 12:08:51,COMPLETE
-8,examine casually,Ellen,2021-01-13 02:17:20,COMPLETE
-8,check ticket,Mike,2021-01-13 03:10:30,COMPLETE
-4,decide,Sara,2021-01-13 06:31:17,COMPLETE
-5,check ticket,Mike,2021-01-13 07:51:20,COMPLETE
-9,register request,Mike,2021-01-13 22:00:53,COMPLETE
-5,decide,Sara,2021-01-14 15:37:08,COMPLETE
-9,check ticket,Ellen,2021-01-14 16:48:19,COMPLETE
-5,reinitiate request,Sara,2021-01-15 03:04:04,COMPLETE
-3,examine thoroughly,Sue,2021-01-15 08:16:49,COMPLETE
-6,decide,Sara,2021-01-15 10:48:10,COMPLETE
-9,examine casually,Mike,2021-01-16 01:18:14,COMPLETE
-8,decide,Sara,2021-01-16 20:55:28,COMPLETE
-7,examine casually,Mike,2021-01-17 04:42:45,COMPLETE
-5,examine thoroughly,Sue,2021-01-17 17:28:28,COMPLETE
-3,check ticket,Ellen,2021-01-18 18:09:04,COMPLETE
-6,reject request,Ellen,2021-01-19 08:22:14,COMPLETE
-9,decide,Sara,2021-01-19 10:56:50,COMPLETE
-3,decide,Sara,2021-01-19 17:49:46,COMPLETE
-7,decide,Sara,2021-01-19 22:55:43,COMPLETE
-4,reject request,Ellen,2021-01-20 10:24:20,COMPLETE
-5,check ticket,Ellen,2021-01-20 16:02:41,COMPLETE
-5,decide,Sara,2021-01-21 01:24:59,COMPLETE
-5,reject request,Ellen,2021-01-21 06:01:01,COMPLETE
-9,reinitiate request,Sara,2021-01-22 09:57:29,COMPLETE
-9,examine casually,Ellen,2021-01-22 09:57:29,COMPLETE
-9,check ticket,Mike,2021-01-22 09:57:29,COMPLETE
-9,decide,Sara,2021-01-22 09:57:29,COMPLETE
-9,reject request,Ellen,2021-01-22 09:57:29,COMPLETE
-8,examine casually,Mike,2021-01-24 08:34:48,COMPLETE
-8,check ticket,Ellen,2021-01-25 00:33:32,COMPLETE
-7,examine thoroughly,Sue,2021-01-26 23:46:25,COMPLETE
-3,pay compensation,Mike,2021-01-27 07:13:04,COMPLETE
-8,decide,Sara,2021-01-28 00:44:21,COMPLETE
-8,pay compensation,Ellen,2021-01-30 02:17:26,COMPLETE
-7,check ticket,Ellen,2021-01-31 20:50:29,COMPLETE
-7,decide,Sara,2021-02-02 04:42:29,COMPLETE
-7,reject request,Ellen,2021-02-02 04:42:29,COMPLETE
+0,A_Create Application,User_1,2021-01-01 01:00:00,COMPLETE
+0,A_Submitted,User_5,2021-01-01 01:00:00,COMPLETE
+0,A_Concept,User_5,2021-01-01 01:39:59,COMPLETE
+1,A_Create Application,User_43,2021-01-01 02:10:32,COMPLETE
+1,A_Concept,User_43,2021-01-01 02:10:32,COMPLETE
+2,A_Create Application,User_1,2021-01-01 03:20:14,COMPLETE
+2,A_Concept,User_1,2021-01-01 03:20:14,COMPLETE
+3,A_Create Application,User_1,2021-01-01 04:32:11,COMPLETE
+3,A_Concept,User_1,2021-01-01 04:32:11,COMPLETE
+4,A_Create Application,User_10,2021-01-01 05:41:07,COMPLETE
+4,A_Submitted,User_1,2021-01-01 05:41:07,COMPLETE
+4,A_Concept,User_10,2021-01-01 06:47:57,COMPLETE
+5,A_Create Application,User_9,2021-01-01 06:49:05,COMPLETE
+5,A_Concept,User_9,2021-01-01 06:49:05,COMPLETE
+6,A_Create Application,User_1,2021-01-01 07:59:55,COMPLETE
+6,A_Concept,User_1,2021-01-01 07:59:55,COMPLETE
+7,A_Create Application,User_38,2021-01-01 09:10:51,COMPLETE
+7,A_Concept,User_1,2021-01-01 09:10:51,COMPLETE
+8,A_Create Application,User_38,2021-01-01 10:20:26,COMPLETE
+8,A_Submitted,User_38,2021-01-01 10:20:26,COMPLETE
+9,A_Create Application,User_1,2021-01-01 11:30:06,COMPLETE
+9,A_Submitted,User_1,2021-01-01 11:30:06,COMPLETE
+8,A_Concept,User_1,2021-01-01 11:41:48,COMPLETE
+9,A_Concept,User_4,2021-01-01 13:19:39,COMPLETE
+5,A_Accepted,User_9,2021-01-03 00:14:07,COMPLETE
+3,A_Accepted,User_18,2021-01-03 03:09:10,COMPLETE
+0,A_Accepted,User_5,2021-01-03 03:30:20,COMPLETE
+5,A_Complete,User_9,2021-01-03 04:11:49,COMPLETE
+2,A_Accepted,User_19,2021-01-03 06:05:31,COMPLETE
+7,A_Accepted,User_2,2021-01-03 06:27:50,COMPLETE
+3,A_Complete,User_18,2021-01-03 06:31:58,COMPLETE
+8,A_Accepted,User_15,2021-01-03 07:58:08,COMPLETE
+6,A_Accepted,User_13,2021-01-03 08:16:59,COMPLETE
+0,A_Complete,User_5,2021-01-03 08:46:40,COMPLETE
+2,A_Complete,User_19,2021-01-03 08:52:27,COMPLETE
+8,A_Complete,User_15,2021-01-03 10:06:32,COMPLETE
+7,A_Complete,User_2,2021-01-03 10:15:51,COMPLETE
+6,A_Complete,User_13,2021-01-03 13:58:58,COMPLETE
+4,A_Accepted,User_10,2021-01-03 14:25:59,COMPLETE
+9,A_Accepted,User_4,2021-01-03 16:32:28,COMPLETE
+9,A_Complete,User_4,2021-01-03 16:32:28,COMPLETE
+1,A_Accepted,User_43,2021-01-03 17:00:01,COMPLETE
+4,A_Complete,User_10,2021-01-03 18:33:24,COMPLETE
+1,A_Complete,User_43,2021-01-03 18:48:02,COMPLETE
+5,A_Cancelled,User_1,2021-02-01 02:52:16,COMPLETE
+8,A_Cancelled,User_1,2021-02-01 16:30:46,COMPLETE
+7,A_Validating,User_35,2021-02-02 07:55:23,COMPLETE
+1,A_Cancelled,User_1,2021-02-02 08:16:54,COMPLETE
+2,A_Validating,User_34,2021-02-03 02:14:00,COMPLETE
+6,A_Validating,User_114,2021-02-03 03:38:13,COMPLETE
+9,A_Validating,User_120,2021-02-03 06:55:04,COMPLETE
+0,A_Cancelled,User_5,2021-02-03 17:37:43,COMPLETE
+3,A_Validating,User_85,2021-02-04 02:53:22,COMPLETE
+4,A_Cancelled,User_10,2021-02-04 15:20:01,COMPLETE
+7,A_Cancelled,User_1,2021-02-04 22:32:54,COMPLETE
+9,A_Cancelled,User_102,2021-02-05 20:39:10,COMPLETE
+2,A_Cancelled,User_34,2021-02-05 21:37:02,COMPLETE
+6,A_Denied,User_95,2021-02-05 23:26:09,COMPLETE
+3,A_Cancelled,User_41,2021-02-06 18:38:42,COMPLETE

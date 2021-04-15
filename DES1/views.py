@@ -4,7 +4,7 @@ from pm4py.visualization.process_tree import visualizer as pt_visualizer
 
 from pm4py.util.business_hours import BusinessHours
 from datetime import datetime
-
+import math
 import os
 from pm4py.objects.log.importer.xes import importer as xes_importer
 from pm4py.util import constants
@@ -147,23 +147,27 @@ def result(request):
     logtime = request.POST.get('loti')
     logtran = request.POST.get('lotr')
     logstart = request.POST.get('stti')
+    #logstart = ''
     logcompl = request.POST.get('coti')
+    #logcompl = ''
     logreso = request.POST.get('lore')
     logid = request.POST.get('loid')
     if logid == '':
-        logid = "concept:name"
+        logid = "EventID"
     if logname == '':
         logname = "concept:name"
     if logtime == '':
         logtime = "time:timestamp"
+    '''
     if logstart == '':
         logstart = "time:timestamp"
     if logcompl == '':
         logcompl = "time:timestamp"
+    '''
     if logreso == '':
         logreso = "org:resource"
     if logtran == '':
-        logtran = "lifecycle:transition"
+        logtran = "time:timestamp"
     ADRESS = logadr
     #print(inputname[-3:],"inputname[:-3]")
 
@@ -197,6 +201,16 @@ def statics(request):
     duration = Duration
     #deviation = infra.recieve_and_convert_log.get_deviation(duration,log)
     deviation = Deviation
+    actwaittime0 = infra.recieve_and_convert_log.activitywaitingtime(log)
+    actwaittime = []
+    for ele in duration:
+        if ele[0] in actwaittime0.keys():
+            actwaittime.append((ele[0],actwaittime0[ele[0]]))
+        else:
+            actwaittime.append((ele[0],0))
+    print(actwaittime0,actwaittime,'line 207')
+
+
     #waitingtime = infra.recieve_and_convert_log.waitingtime(log)
     waitingtime = Waitingtime
     #frequency = infra.recieve_and_convert_log.get_waitinhour(log,Waitingtime,'n',Watichange)
@@ -209,13 +223,13 @@ def statics(request):
 
     #log_path = os.path.join("tests","input_data","receipt.xes")
     initialtrace = infra.recieve_and_convert_log.initialtrace(log)
-    x, y = case_statistics.get_kde_caseduration(log, parameters={constants.PARAMETER_CONSTANT_TIMESTAMP_KEY: "time:timestamp"})
+    x, y = case_statistics.get_kde_caseduration(log, parameters={constants.PARAMETER_CONSTANT_TIMESTAMP_KEY: logtime})
     gviz1 = graphs_visualizer.apply_plot(x, y, variant=graphs_visualizer.Variants.CASES)
     gviz2 = graphs_visualizer.apply_semilogx(x, y, variant=graphs_visualizer.Variants.CASES)
     graphs_visualizer.save(gviz1,"DES1/static/image1.gv.png")
     graphs_visualizer.save(gviz2,"DES1/static/image2.gv.png")
 
-    x, y = attributes_filter.get_kde_date_attribute(log, attribute="time:timestamp")
+    x, y = attributes_filter.get_kde_date_attribute(log, attribute=logtime)
     gviz3 = graphs_visualizer.apply_plot(x, y, variant=graphs_visualizer.Variants.DATES)
     graphs_visualizer.save(gviz3,"DES1/static/image3.gv.png")
 
@@ -234,30 +248,47 @@ def statics(request):
     deviationthoughputtime = infra.recieve_and_convert_log.statics(log)[4][1]
     arrivalratio = infra.recieve_and_convert_log.statics(log)[5]
     dispersionratio = infra.recieve_and_convert_log.statics(log)[6]
-    resourcedict = infra.recieve_and_convert_log.initialresource1(log)
+    #resourcedict = infra.recieve_and_convert_log.initialresource1(log)
     initialcapacity = infra.recieve_and_convert_log.computecapacity(log)
     initiallimit = infra.recieve_and_convert_log.initiallimit(log)[0]
     initialcaplim = []
     for i in range(len(initialcapacity)):
         initialcaplim.append((initialcapacity[i][0],initialcapacity[i][1],initiallimit[i][1]))
     #print(intialcapacity,"line 205")
-    Actresource = roles_discovery.apply(log,variant=None, parameters={rpd.Parameters.RESOURCE_KEY:logreso})
+    resincomplete = 0
     list0 = []
+    for trace in log:
+        for event in trace:
+            try:
+                if math.isnan(event[logreso]):
+                    resincomplete = 1
+            except:
+                a = 1
+
+            if event[logreso] == None or event[logreso] == '':
+                resincomplete = 1
+    if resincomplete == 0:
+        Actresource = roles_discovery.apply(log,variant=None, parameters={rpd.Parameters.RESOURCE_KEY:logreso})
+        handover = infra.recieve_and_convert_log.getactivityresourcecount(log,list0,logname,logreso)[1]
+    else:
+        Actresource = {}
+        handover = ({},None)
+
     infra.recieve_and_convert_log.notdoact(ptree,list0)
-    handover = infra.recieve_and_convert_log.getactivityresourcecount(log,list0,logname,logreso)[1]
+
 
 
 
 
     for i,x in enumerate(duration):
-        duration[i]=(x[0],round(x[1],2),round(deviation[i][1],2))
+        duration[i]=(x[0],round(x[1],2),round(actwaittime[i][1],2),round(deviation[i][1],2))
     for i,x in enumerate(deviation):
         deviation[i]=(x[0],round(x[1],2))
     context = {'log':log,'ptree':ptree,'duration':duration,'deviation':deviation,\
     'worked_time':worked_time,'numtrace':numtrace,'numactivity':numactivity,'activitylist':activitylist,\
     'timeinterval':timeinterval,'meanthoughputtime':meanthoughputtime,\
     'deviationthoughputtime':deviationthoughputtime,'arrivalratio':arrivalratio,\
-    'dispersionratio':dispersionratio,'resourcedict':Actresource,'handover':handover,"initialcaplim":initialcaplim,'initialtrace':initialtrace}
+    'dispersionratio':dispersionratio,'resourcedict':Actresource,'handover':handover,"initialcaplim":initialcaplim,'initialtrace':initialtrace,'actwaittime':actwaittime}
     return render(request,'statics.html',context)
 
 def simulation(request):
@@ -725,21 +756,21 @@ def changeptree(request):
     k = 0
     for i,ele in enumerate(ptree):
         if i < k:
-            print(i,k,"ik")
+            #print(i,k,"ik")
             continue
 
         if ele == "'":
-            print("left")
+            #print("left")
 
             for j,ele in enumerate(ptree[i+1:]):
-                print(ele,"ele")
+                #print(ele,"ele")
                 if ele == "'":
-                    print("right")
+                    #print("right")
                     k = i+j+2
-                    print(k,ptree[k],"line49")
+                    #print(k,ptree[k],"line49")
                     break
                 if ele == " ":
-                    print("space")
+                    #print("space")
                     b = list(ptree)
                     b[i+j+1] = '$'
                     ptree = ''.join(b)

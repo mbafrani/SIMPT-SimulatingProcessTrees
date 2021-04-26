@@ -127,4 +127,4 @@ In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation proces
 - Shuai Jiao
 - Mahsa Pourbafrani
 ### Citation
- - Pourbafrani, M., Jiao, Sh., van der Aalst, W.M.P.: SIMPT: Process improvement using inter-active simulation of time-aware process trees. In: Proceedings of the DemonstrationTrack at RCIS 2021
+ - Pourbafrani, M., Jiao, Sh., van der Aalst, W.M.P.: SIMPT: Process improvement using interactive simulation of time-aware process trees. In: Proceedings of the DemonstrationTrack at RCIS 2021

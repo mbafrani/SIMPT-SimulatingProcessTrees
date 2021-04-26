@@ -7,7 +7,7 @@ The tool is a Python-based web application based on the Django framework, to run
 - Use *127.0.0.1:8000* in the browser
 
 ## How to Use:
-In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation process parameters and how to use the app.
+In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation process parameters and how to use the app (please download the video).
 
 ### Simulation Steps:
 
@@ -126,3 +126,5 @@ In [this video](SIMPTIntroduction.mp4), we shortly explain the simulation proces
 
 - Shuai Jiao
 - Mahsa Pourbafrani
+### Citation
+ - Pourbafrani, M., Jiao, Sh., van der Aalst, W.M.P.: SIMPT: Process improvement using inter-active simulation of time-aware process trees. In: Proceedings of the DemonstrationTrack at RCIS 2021
